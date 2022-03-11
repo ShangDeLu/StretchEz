@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:id="@+id/linearLayout">
+
+    <TextView
+        android:id="@+id/stretch_plan_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stretch Plan Title"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        tools:layout_conversion_absoluteHeight="19dp"
+        tools:layout_conversion_absoluteWidth="395dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/stretch_plan_duration"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Stretch Plan Duration"/>-->
+
+</LinearLayout>
