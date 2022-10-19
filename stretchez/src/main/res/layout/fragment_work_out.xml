@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context="me.shangdelu.stretchez.WorkOutFragment">
+
+    <TextView
+        android:id="@+id/cdTimer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:text="@string/testing_time"
+        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textSize="50sp"/>
+
+    <VideoView
+        android:id="@+id/workOutVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/congratulations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/finish_stretching"
+        android:textColor="@color/black"
+        android:textSize="40sp"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/finish_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/repeat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_button"
+            android:textColor="@color/white"
+            android:textSize="30sp"/>
+
+        <Button
+            android:id="@+id/return_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/return_button"
+            android:textColor="@color/white"
+            android:textSize="30sp"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+

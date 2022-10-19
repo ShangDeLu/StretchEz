@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="me.shangdelu.stretchez.ui.main.StretchStartFragment">
+
+    <TextView
+        android:id="@+id/welcome_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_500"
+        android:text="@string/welcome"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.403" />
+
+    <Button
+        android:id="@+id/stretch_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:background="@color/purple_500"
+        android:text="@string/start_stretching"
+        android:textSize="20sp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcome_message"
+        app:layout_constraintVertical_bias="0.0">
+    </Button>
+
+    <Button
+        android:id="@+id/pi_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/raspberry_test"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stretch_btn"
+        app:layout_constraintVertical_bias="0.331">
+    </Button>
+
+    <Button
+        android:id="@+id/upload_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/upload_test"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pi_btn">
+    </Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
