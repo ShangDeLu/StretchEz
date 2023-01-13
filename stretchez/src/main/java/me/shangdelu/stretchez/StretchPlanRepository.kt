@@ -3,6 +3,8 @@ package me.shangdelu.stretchez
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
+import me.shangdelu.stretchez.database.StretchExercise
+import me.shangdelu.stretchez.database.StretchPlan
 import me.shangdelu.stretchez.database.StretchPlanDatabase
 import me.shangdelu.stretchez.database.migration_1_2
 import java.lang.IllegalStateException
@@ -21,8 +23,12 @@ class StretchPlanRepository private constructor(context: Context) {
         .build()
 
     private val stretchPlanDao = database.stretchPlanDao()
+    private val stretchExerciseDao = database.stretchExerciseDao()
+    //use an executor that points to a new thread, so anything execute with executor
+    //happens off the main thread.
     private val executor = Executors.newSingleThreadExecutor()
 
+    //StretchPlans Functions
     fun getStretchPlans(): LiveData<List<StretchPlan>> = stretchPlanDao.getStretchPlans()
     
     fun getStretchPlan(id: UUID): LiveData<StretchPlan?> = stretchPlanDao.getStretchPlan(id)
@@ -42,6 +48,37 @@ class StretchPlanRepository private constructor(context: Context) {
     fun deleteStretchPlan(stretchPlan: StretchPlan) {
         executor.execute {
             stretchPlanDao.deleteStretchPlan((stretchPlan))
+        }
+    }
+
+    //Stretch Exercise Functions
+    fun getExercisesOfPlan(planID: UUID?): LiveData<List<StretchExercise>> = stretchExerciseDao.getExercisesOfPlan(planID)
+
+    fun getTemplateExercises(): LiveData<List<StretchExercise>> = stretchExerciseDao.getTemplateExercises()
+
+    fun getExercise(exerciseID: Int?): LiveData<StretchExercise?> = stretchExerciseDao.getExercise(exerciseID)
+
+    fun addExerciseToPlan(stretchExercise: StretchExercise) {
+        executor.execute {
+            stretchExerciseDao.addExerciseToPlan(stretchExercise)
+        }
+    }
+
+    fun addTemplateExercise(stretchExercise: StretchExercise) {
+        executor.execute {
+            stretchExerciseDao.addTemplateExercise(stretchExercise)
+        }
+    }
+
+    fun updateExercise(stretchExercise: StretchExercise) {
+        executor.execute {
+            stretchExerciseDao.updateExercise(stretchExercise)
+        }
+    }
+
+    fun deleteExercise(stretchExercise: StretchExercise) {
+        executor.execute {
+            stretchExerciseDao.deleteExercise(stretchExercise)
         }
     }
 

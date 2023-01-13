@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stretch_exercise_linearLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:id="@+id/linearLayout">
+    android:padding="8dp">
 
     <TextView
-        android:id="@+id/stretch_plan_title"
+        android:id="@+id/stretch_exercise_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/stretch_plan_title_demo"
+        android:text="@string/stretch_exercise_title_demo"
         android:textColor="@color/black"
         android:textSize="18sp"
         tools:layout_conversion_absoluteHeight="19dp"
         tools:layout_conversion_absoluteWidth="395dp"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/stretch_plan_duration"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Stretch Plan Duration"/>-->
+        tools:layout_editor_absoluteY="8dp"/>
 
 </LinearLayout>

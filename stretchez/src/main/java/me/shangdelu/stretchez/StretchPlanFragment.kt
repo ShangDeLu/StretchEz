@@ -9,7 +9,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
+import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
 private const val TAG = "StretchPlanFragment"
@@ -28,7 +29,7 @@ class StretchPlanFragment : Fragment() {
     private var argumentOption: Int = 0
     private var stretchPlanId: UUID? = null
     private val stretchPlanDetailViewModel: StretchPlanDetailViewModel by lazy {
-        ViewModelProviders.of(this)[StretchPlanDetailViewModel::class.java]
+        ViewModelProvider(this)[StretchPlanDetailViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class StretchPlanFragment : Fragment() {
         //Button to stretching
         stretchPlanStartButton.setOnClickListener {
             val workoutFragment = WorkOutFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, workoutFragment)
             transaction.commit()
         }
@@ -67,7 +68,7 @@ class StretchPlanFragment : Fragment() {
         //Button to view available stretching exercises
         selectActionButton.setOnClickListener {
             val selectActionFragment = SelectActionFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, selectActionFragment)
             transaction.commit()
         }
@@ -77,7 +78,7 @@ class StretchPlanFragment : Fragment() {
             if (stretchPlanTitle.text.toString().isEmpty()) {
                 Toast.makeText(this.context, R.string.no_title_toast, Toast.LENGTH_LONG).show()
             } else {
-                if (argumentOption == 0) {
+                if (argumentOption == 0) { //when plan already exist, option = 0
                     stretchPlanRepository.updateStretchPlan(
                         StretchPlan(
                         id = stretchPlanId!!,
@@ -86,10 +87,10 @@ class StretchPlanFragment : Fragment() {
                     )
                     )
                     val stretchPlanListFragment = StretchPlanListFragment()
-                    val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+                    val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
                     transaction.replace(R.id.fragment_container, stretchPlanListFragment)
                     transaction.commit()
-                } else {
+                } else { //when creating new plan, option = 1
                     stretchPlanRepository.addStretchPlan(
                         StretchPlan(
                             title = stretchPlanTitle.text.toString(),
@@ -98,7 +99,7 @@ class StretchPlanFragment : Fragment() {
                     )
                     val stretchPlanListFragment = StretchPlanListFragment()
                     val transaction: FragmentTransaction =
-                        requireFragmentManager().beginTransaction()
+                        parentFragmentManager.beginTransaction()
                     transaction.replace(R.id.fragment_container, stretchPlanListFragment)
                     transaction.commit()
                 }
@@ -108,7 +109,7 @@ class StretchPlanFragment : Fragment() {
         //Button to return to list of stretch plan
         stretchPlanCancelButton.setOnClickListener {
             val stretchPlanListFragment = StretchPlanListFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, stretchPlanListFragment)
             transaction.commit()
         }

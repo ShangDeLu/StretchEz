@@ -5,13 +5,14 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import me.shangdelu.stretchez.StretchPlan
 
-@Database(entities = [ StretchPlan::class ], version=2)
+@Database(entities = [ StretchPlan::class, StretchExercise::class ], version=3)
 @TypeConverters(StretchPlanTypeConverters::class)
 abstract class StretchPlanDatabase : RoomDatabase() {
 
+    //Connect DAO to the database
     abstract fun stretchPlanDao(): StretchPlanDao
+    abstract fun stretchExerciseDao(): StretchExerciseDao
 }
 
 val migration_1_2 = object : Migration(1, 2) {

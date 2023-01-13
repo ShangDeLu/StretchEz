@@ -2,16 +2,16 @@ package me.shangdelu.stretchez.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import me.shangdelu.stretchez.StretchPlan
 import java.util.*
 
 @Dao
 interface StretchPlanDao {
 
-    @Query("SELECT * FROM stretchPlan WHERE timestamp is null")
+    //If timestamp is not null, the StretchPlan has been "deleted"/moved to garbage bin
+    @Query("SELECT * FROM StretchPlan WHERE timestamp is null")
     fun getStretchPlans(): LiveData<List<StretchPlan>>
 
-    @Query("SELECT * FROM stretchPlan WHERE id=(:id)")
+    @Query("SELECT * FROM StretchPlan WHERE id=(:id)")
     fun getStretchPlan(id: UUID): LiveData<StretchPlan?>
 
     @Update

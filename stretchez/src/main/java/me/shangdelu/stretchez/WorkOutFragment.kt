@@ -74,7 +74,7 @@ class WorkOutFragment : Fragment() {
             //Button to repeat current exercise
             repeatButton.setOnClickListener {
                 val workoutFragment = WorkOutFragment()
-                val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+                val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_container, workoutFragment)
                 transaction.commit()
             }
@@ -82,7 +82,7 @@ class WorkOutFragment : Fragment() {
             //Button to return to home screen
             returnButton.setOnClickListener {
                 val stretchStartFragment = StretchStartFragment()
-                val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+                val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_container, stretchStartFragment)
                 transaction.commit()
             }

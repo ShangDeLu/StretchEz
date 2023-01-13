@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -17,7 +17,7 @@ class SelectActionFragment : Fragment() {
     private var adapter: ActionAdapter? = null
 
     private val selectActionListViewModel: SelectActionListViewModel by lazy {
-        ViewModelProviders.of(this)[SelectActionListViewModel::class.java]
+        ViewModelProvider(this)[SelectActionListViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,6 +1,7 @@
 package me.shangdelu.stretchez
 
 import androidx.lifecycle.ViewModel
+import me.shangdelu.stretchez.database.StretchPlan
 
 class StretchPlanListViewModel : ViewModel() {
 

@@ -9,11 +9,12 @@ import android.view.*
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
 class StretchPlanListFragment : Fragment() {
@@ -21,8 +22,12 @@ class StretchPlanListFragment : Fragment() {
     /**
      * Required interface for hosting activities
      */
+    //Use a callback interface to delegate on-click events from fragments back to its hosting activity.
     interface Callbacks {
+        //called when click on StretchPlan
         fun onStretchPlanSelected(stretchPlanId: UUID, option: Int)
+        //called when click on StretchingExercise
+        fun onExerciseSelected(exerciseID: Int?, option: Int)
     }
 
     private var callbacks: Callbacks? = null
@@ -34,7 +39,7 @@ class StretchPlanListFragment : Fragment() {
     private var adapter: StretchPlanAdapter? = StretchPlanAdapter(emptyList())
 
     private val stretchPlanListViewModel: StretchPlanListViewModel by lazy {
-        ViewModelProviders.of(this)[StretchPlanListViewModel::class.java]
+        ViewModelProvider(this)[StretchPlanListViewModel::class.java]
     }
 
     override fun onAttach(context: Context) {
@@ -57,8 +62,7 @@ class StretchPlanListFragment : Fragment() {
 
         stretchPlanCoordinatorLayout = view.findViewById(R.id.stretch_plan_coordinator_layout)
 
-        stretchPlanRecyclerView =
-            view.findViewById(R.id.stretch_plan_recycler_view) as RecyclerView
+        stretchPlanRecyclerView = view.findViewById(R.id.stretch_plan_recycler_view) as RecyclerView
         stretchPlanRecyclerView.layoutManager = LinearLayoutManager(context)
 
         stretchPlanRecyclerView.adapter = adapter
@@ -66,7 +70,7 @@ class StretchPlanListFragment : Fragment() {
         //Swipe to delete existing stretch plans
         val swipeToDeleteCallBack = object : SwipeToDeleteCallBack(context) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
+                val position = viewHolder.bindingAdapterPosition
                 val currentId = adapter?.stretchPlans?.get(position)
                 currentId?.let {
                     // get current timestamp of the stretch plan
@@ -78,12 +82,12 @@ class StretchPlanListFragment : Fragment() {
                 val deleteSnackbar = Snackbar.make(stretchPlanCoordinatorLayout,
                     R.string.delete_plan_snackbar, Snackbar.LENGTH_LONG)
 
-                deleteSnackbar.setAction(R.string.undo_delete_snackbar, View.OnClickListener {
+                deleteSnackbar.setAction(R.string.undo_delete_snackbar) {
                     currentId?.let {
                         it.timestamp = null
                         stretchPlanListViewModel.updateStretchPlan(it)
                     }
-                })
+                }
 
                 deleteSnackbar.setActionTextColor(Color.WHITE)
                 deleteSnackbar.show()

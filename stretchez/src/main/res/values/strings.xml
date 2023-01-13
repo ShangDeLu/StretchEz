@@ -20,7 +20,10 @@
     <string name="save_button">Save</string>
     <string name="no_title_toast">Please Give A Title</string>
     <string name="delete_plan_snackbar">Stretch Plan Deleted</string>
+    <string name="delete_exercise_snackbar">Stretch Exercise Deleted</string>
     <string name="undo_delete_snackbar">UNDO</string>
+    <string name="stretch_plan_title_demo">Stretch Plan Title</string>
+    <string name="stretch_exercise_title_demo">Stretch Exercise Title</string>
     <string name="title_1">title 1</string>
     <string name="title_2">title 2</string>
     <string name="title_3">title 3</string>
@@ -29,10 +32,20 @@
     <string name="head_title">Header Title</string>
     <string name="head_text">Header Text</string>
     <string name="subtitle">Subtitle</string>
+    <string name="possible_exercises">Choice of Stretching Exercises</string>
+    <string name="stretch_exercise_name_label">Name</string>
+    <string name="stretch_exercise_description_label">Description</string>
+    <string name="stretch_exercise_link_label">Link</string>
+    <string name="stretch_exercise_name">Enter a name for the Stretch Exercise</string>
+    <string name="stretch_exercise_description">Enter a description for the Stretch Exercise</string>
+    <string name="stretch_exercise_link">Enter the link to the Stretch Exercise</string>
+    <string name="new_exercise">New Exercise</string>
 
     <string name="raspberry_test">Pi Test</string>
     <string name="test_button">Test</string>
     <string name="failure_message">Failed to fetch content</string>
     <string name="upload_test">Upload Test</string>
     <string name="upload_button">Upload</string>
+    <string name="upload_stretchPlan_button">Upload StretchPlan</string>
+    <string name="upload_stretchPlan_test">Upload StretchPlan Test</string>
 </resources>

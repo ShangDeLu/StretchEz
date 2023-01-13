@@ -8,7 +8,10 @@ class StretchPlanTypeConverters {
 
     @TypeConverter
     fun toUUID(uuid: String?): UUID? {
-        return UUID.fromString(uuid)
+        //if uuid is null, return null
+        return uuid?.let {
+            UUID.fromString(it)
+        }
     }
 
     @TypeConverter

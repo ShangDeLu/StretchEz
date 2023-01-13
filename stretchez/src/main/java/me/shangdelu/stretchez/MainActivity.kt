@@ -1,7 +1,10 @@
 package me.shangdelu.stretchez
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import me.shangdelu.stretchez.database.StretchExercise
 import me.shangdelu.stretchez.ui.main.StretchStartFragment
 import java.util.*
 
@@ -28,6 +31,15 @@ class MainActivity : AppCompatActivity(), StretchPlanListFragment.Callbacks {
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null) // fragment transaction to the back stack
+            .commit()
+    }
+
+    override fun onExerciseSelected(exerciseID: Int?, option: Int) {
+        val fragment = StretchExerciseFragment.newInstance(exerciseID, option)
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null) //so when press back button, will go back to the list of exercise
             .commit()
     }
 }
