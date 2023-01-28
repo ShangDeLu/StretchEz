@@ -3,12 +3,10 @@ package me.shangdelu.stretchez
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
-import android.os.Build.VERSION_CODES.S
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import me.shangdelu.stretchez.database.StretchExercise
+import me.shangdelu.stretchez.ui.main.ui.dashboard.StretchPlanListFragment
 
 class StretchExerciseListFragment : Fragment() {
 
