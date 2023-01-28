@@ -1,24 +1,17 @@
-package me.shangdelu.stretchez.ui.main
+package me.shangdelu.stretchez.ui.main.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import me.shangdelu.stretchez.R
-import me.shangdelu.stretchez.StretchExerciseListFragment
-import me.shangdelu.stretchez.StretchPlanListFragment
-import me.shangdelu.stretchez.raspberryPi.RaspberryFragment
-import me.shangdelu.stretchez.uploadStretchPlan.UploadStretchPlanFragment
-import me.shangdelu.stretchez.uploadTest.UploadTestFragment
+import me.shangdelu.stretchez.databinding.FragmentStretchStartBinding
 
 class StretchStartFragment : Fragment() {
 
-    private lateinit var stretchButton: Button
-
-    private lateinit var exerciseButton: Button
+    private lateinit var binding: FragmentStretchStartBinding
 
 //    private lateinit var piButton: Button
 //
@@ -30,12 +23,8 @@ class StretchStartFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_stretch_start, container, false)
 
-        stretchButton = view.findViewById(R.id.stretch_btn) as Button
-
-        exerciseButton = view.findViewById(R.id.exercise_btn) as Button
-
+        binding = FragmentStretchStartBinding.inflate(inflater, container, false)
 
 //        piButton = view.findViewById(R.id.pi_btn) as Button
 //
@@ -44,19 +33,13 @@ class StretchStartFragment : Fragment() {
 //        uploadStretchPlan = view.findViewById(R.id.upload_stretchPlan_btn) as Button //set the button for upload stretchPlan
 
         //Button to the list of stretch plans
-        stretchButton.setOnClickListener {
-            val stretchPlanListFragment = StretchPlanListFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, stretchPlanListFragment)
-            transaction.commit()
+        binding.stretchBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_stretch_plan_list)
         }
 
         //Button to the list of stretching exercises
-        exerciseButton.setOnClickListener {
-            val stretchExerciseListFragment = StretchExerciseListFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, stretchExerciseListFragment)
-            transaction.commit()
+        binding.exerciseBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_home_to_navigation_exercise_list)
         }
 
 //        //Button to the fragment testing data retrieving from remote
@@ -83,7 +66,7 @@ class StretchStartFragment : Fragment() {
 //            transaction.commit()
 //        }
 
-        return view
+        return binding.root
     }
 
 

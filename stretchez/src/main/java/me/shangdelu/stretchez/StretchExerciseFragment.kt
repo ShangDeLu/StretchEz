@@ -1,7 +1,6 @@
 package me.shangdelu.stretchez
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import me.shangdelu.stretchez.R
+import androidx.navigation.fragment.findNavController
 import me.shangdelu.stretchez.database.StretchExercise
-import me.shangdelu.stretchez.database.StretchPlan
-import java.util.*
+import me.shangdelu.stretchez.ui.main.ui.notifications.StretchExerciseListFragment
 
 private const val TAG = "StretchExerciseFragment"
 private const val ARG_EXERCISE_ID = "exercise_id"
@@ -78,10 +74,8 @@ class StretchExerciseFragment : Fragment() {
                             exerciseLink = stretchExerciseLink.text.toString()
                         )
                     )
-                    val stretchExerciseListFragment = StretchExerciseListFragment()
-                    val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.fragment_container, stretchExerciseListFragment)
-                    transaction.commit()
+                    findNavController().navigate(R.id.action_navigation_exercise_to_navigation_exercise_list)
+
                 } else { //when creating new exercise, option = 1
                     stretchExerciseRepository.addTemplateExercise(
                         StretchExercise(
@@ -90,21 +84,14 @@ class StretchExerciseFragment : Fragment() {
                             exerciseLink = stretchExerciseLink.text.toString()
                         )
                     )
-                    val stretchExerciseListFragment = StretchExerciseListFragment()
-                    val transaction: FragmentTransaction =
-                        parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.fragment_container, stretchExerciseListFragment)
-                    transaction.commit()
+                    findNavController().navigate(R.id.action_navigation_exercise_to_navigation_exercise_list)
                 }
             }
         }
 
         //Button to return to list of stretch exercise
         stretchExerciseCancelButton.setOnClickListener {
-            val stretchExerciseListFragment = StretchExerciseListFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, stretchExerciseListFragment)
-            transaction.commit()
+            findNavController().navigate(R.id.action_navigation_exercise_to_navigation_exercise_list)
         }
 
         return view
@@ -122,7 +109,6 @@ class StretchExerciseFragment : Fragment() {
         }
     }
 
-
     private fun updateUI() {
         stretchExerciseName.setText(exercise.exerciseName)
         stretchExerciseDescription.setText(exercise.exerciseDescription)
@@ -131,16 +117,12 @@ class StretchExerciseFragment : Fragment() {
 
     //Use Fragment Arguments to pass the exerciseID, as Fragment arguments help keep fragment encapsulated
     companion object {
-        //Creates the fragment instance and bundles up and set its arguments.
-        fun newInstance(exerciseID: Int?, option: Int): StretchExerciseFragment {
+        fun newInstance(exerciseID: Int?, option: Int): Bundle {
             //This Bundle contains key-value pairs that work just like the intent extras of an Activity.
             //Each pair is known as an argument.
-            val args = Bundle().apply {
+            return Bundle().apply {
                 putSerializable(ARG_EXERCISE_ID, exerciseID)
                 putInt("Option", option)
-            }
-            return StretchExerciseFragment().apply {
-                arguments = args
             }
         }
     }

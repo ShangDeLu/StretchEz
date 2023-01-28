@@ -1,4 +1,4 @@
-package me.shangdelu.stretchez
+package me.shangdelu.stretchez.ui.main.ui.dashboard
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -8,29 +8,30 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import me.shangdelu.stretchez.*
 import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
-class StretchPlanListFragment : Fragment() {
+/**
+ * Required interface for hosting activities
+ */
+//Use a StretchPlanCallback interface to delegate on-click events from fragments back to its hosting activity.
+interface StretchPlanCallbacks {
+    //called when click on StretchPlan
+    fun onStretchPlanSelected(stretchPlanId: UUID, option: Int)
+}
 
-    /**
-     * Required interface for hosting activities
-     */
-    //Use a callback interface to delegate on-click events from fragments back to its hosting activity.
-    interface Callbacks {
-        //called when click on StretchPlan
-        fun onStretchPlanSelected(stretchPlanId: UUID, option: Int)
-        //called when click on StretchingExercise
-        fun onExerciseSelected(exerciseID: Int?, option: Int)
-    }
-
-    private var callbacks: Callbacks? = null
+class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
 
     private lateinit var stretchPlanRecyclerView: RecyclerView
 
@@ -40,17 +41,6 @@ class StretchPlanListFragment : Fragment() {
 
     private val stretchPlanListViewModel: StretchPlanListViewModel by lazy {
         ViewModelProvider(this)[StretchPlanListViewModel::class.java]
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-
     }
 
     override fun onCreateView(
@@ -102,6 +92,9 @@ class StretchPlanListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupMenu()
+
         stretchPlanListViewModel.stretchPlanListLiveData.observe(viewLifecycleOwner)
         { stretchPlans ->
             stretchPlans?.let {
@@ -111,26 +104,34 @@ class StretchPlanListFragment : Fragment() {
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = null
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_stretch_plan_list, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.new_stretchPlan -> {
-                val stretchPlan = StretchPlan()
-                stretchPlanListViewModel.addStretchPlan(stretchPlan)
-                callbacks?.onStretchPlanSelected(stretchPlan.id, 1)
-                true
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+            //Populates the Menu instance with the items defined in file.
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.fragment_stretch_plan_list, menu)
             }
-            else -> return super.onOptionsItemSelected(item)
-        }
+
+            //Respond to MenuItem selection by creating a new stretchPlan, saving it to database,
+            //and then notifying the parent activity that the new stretchPlan has been selected.
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.new_stretchPlan -> {
+                        val stretchPlan = StretchPlan()
+                        stretchPlanListViewModel.addStretchPlan(stretchPlan)
+                        //argumentOption is 1 as we are creating new stretchPlan
+                        onStretchPlanSelected(stretchPlan.id, 1)
+                        //return true once the MenuItem is handled, indicating no further processing is necessary.
+                        true
+                    }
+                    else -> return onMenuItemSelected(menuItem)
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onStretchPlanSelected(stretchPlanId: UUID, option: Int) {
+        val arguments = StretchPlanFragment.newInstance(stretchPlanId, option)
+        findNavController().navigate(R.id.action_navigation_stretch_plan_list_to_navigation_stretch_plan, arguments)
     }
 
     private fun updateUI(stretchPlans: List<StretchPlan>) {
@@ -163,7 +164,7 @@ class StretchPlanListFragment : Fragment() {
         }
 
         override fun onClick(v: View?) {
-            callbacks?.onStretchPlanSelected(stretchPlan.id, 0)
+            onStretchPlanSelected(stretchPlan.id, 0)
         }
     }
 

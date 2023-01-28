@@ -1,4 +1,4 @@
-package me.shangdelu.stretchez
+package me.shangdelu.stretchez.ui.main.ui.notifications
 
 import android.content.ContentValues.TAG
 import android.content.Context
@@ -8,18 +8,34 @@ import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import me.shangdelu.stretchez.R
+import me.shangdelu.stretchez.StretchExerciseFragment
+import me.shangdelu.stretchez.StretchExerciseListViewModel
+import me.shangdelu.stretchez.SwipeToDeleteCallBack
 import me.shangdelu.stretchez.database.StretchExercise
-import me.shangdelu.stretchez.ui.main.ui.dashboard.StretchPlanListFragment
+import java.util.*
 
-class StretchExerciseListFragment : Fragment() {
+/**
+ * Required interface for hosting activities
+ */
+//Use an ExerciseCallback interface to delegate on-click events from fragments back to its hosting activity.
+interface ExerciseCallbacks {
+    //called when click on StretchingExercise
+    fun onExerciseSelected(exerciseID: Int?, option: Int)
+}
 
-    private var callbacks: StretchPlanListFragment.Callbacks? = null
+
+class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
 
     private lateinit var stretchExerciseRecyclerView: RecyclerView
 
@@ -31,19 +47,6 @@ class StretchExerciseListFragment : Fragment() {
 
     private val stretchExerciseViewModel: StretchExerciseListViewModel by lazy {
         ViewModelProvider(this)[StretchExerciseListViewModel::class.java]
-    }
-
-    //Activity is a subclass of Context, so the Context object passed to onAttach is the activity
-    //instance hosting the fragment.
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as StretchPlanListFragment.Callbacks?
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //tell FragmentManager that this fragment needs to receive menu callbacks.
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -87,6 +90,9 @@ class StretchExerciseListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupMenu()
+
         //Used to register an observer on the LiveData instance and tie the life of the observation
         //to the life of another component, such as an activity or fragment.
         stretchExerciseViewModel.stretchExerciseLiveData.observe(viewLifecycleOwner)
@@ -100,33 +106,33 @@ class StretchExerciseListFragment : Fragment() {
         }
     }
 
-    //Set the variable to null because afterward you cannot access the activity or
-    //count on the activity continuing to exist.
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = null
-    }
-
-    //Populates the Menu instance with the items defined in file.
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.fragment_stretch_exercise_list, menu)
-    }
-
-    //Respond to MenuItem selection by creating a new exercise, saving it to database, and then
-    //notifying the parent activity that the new exercise has been selected.
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.new_stretch_exercise -> {
-                val exercise = StretchExercise()
-                stretchExerciseViewModel.addStretchExercise(exercise)
-                //argumentOption is 1 as we are creating new exercise
-                callbacks?.onExerciseSelected(exercise.exerciseID, 1)
-                //return true once the MenuItem is handled, indicating no further processing is necessary.
-                true
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            //Populates the Menu instance with the items defined in file.
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.fragment_stretch_exercise_list, menu)
             }
-            else -> return super.onOptionsItemSelected(item)
-        }
+            //Respond to MenuItem selection by creating a new exercise, saving it to database, and then
+            //notifying the parent activity that the new exercise has been selected.
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.new_stretch_exercise -> {
+                        val exercise = StretchExercise()
+                        stretchExerciseViewModel.addStretchExercise(exercise)
+                        //argumentOption is 1 as we are creating new exercise
+                        onExerciseSelected(exercise.exerciseID, 1)
+                        //return true once the MenuItem is handled, indicating no further processing is necessary.
+                        true
+                    }
+                    else -> return onMenuItemSelected(menuItem)
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onExerciseSelected(exerciseID: Int?, option: Int) {
+        val arguments = StretchExerciseFragment.newInstance(exerciseID, option)
+        findNavController().navigate(R.id.action_navigation_exercise_list_to_navigation_exercise, arguments)
     }
 
     //Set up StretchExerciseListFragment's UI
@@ -161,9 +167,9 @@ class StretchExerciseListFragment : Fragment() {
         }
 
         override fun onClick(v: View) {
-            //call onExerciseSelected from callbacks interface when individual exercise is clicked.
-            //argument option is 1 as we are clicking on existing exercise
-            callbacks?.onExerciseSelected(stretchExercise.exerciseID, 0)
+            //call onExerciseSelected from ExerciseCallbacks interface when individual exercise is clicked.
+            //argument option is 0 as we are clicking on existing exercise
+            onExerciseSelected(stretchExercise.exerciseID, 0)
         }
 
     }
@@ -194,4 +200,5 @@ class StretchExerciseListFragment : Fragment() {
             return StretchExerciseListFragment()
         }
     }
+
 }

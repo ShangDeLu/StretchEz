@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="me.shangdelu.stretchez.ui.main.ui.home.StretchStartFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_stretch_start" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_stretch_plan_list"
+            app:destination="@id/navigation_stretch_plan_list" />
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_exercise_list"
+            app:destination="@id/navigation_exercise_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_stretch_plan_list"
+        android:name="me.shangdelu.stretchez.ui.main.ui.dashboard.StretchPlanListFragment"
+        android:label="@string/title_stretch_plans"
+        tools:layout="@layout/fragment_stretch_plan_list" >
+        <action
+            android:id="@+id/action_navigation_stretch_plan_list_to_navigation_stretch_plan"
+            app:destination="@id/navigation_stretch_plan" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exercise_list"
+        android:name="me.shangdelu.stretchez.ui.main.ui.notifications.StretchExerciseListFragment"
+        android:label="@string/title_exercises"
+        tools:layout="@layout/fragment_stretch_exercise_list" >
+        <action
+            android:id="@+id/action_navigation_exercise_list_to_navigation_exercise"
+            app:destination="@id/navigation_exercise"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_stretch_plan"
+        android:name="me.shangdelu.stretchez.StretchPlanFragment"
+        android:label="@string/title_stretch_plan"
+        tools:layout="@layout/fragment_stretch_plan">
+        <action
+            android:id="@+id/action_navigation_stretch_plan_to_navigation_stretch_plan_list"
+            app:destination="@id/navigation_stretch_plan_list" />
+        <action
+            android:id="@+id/action_navigation_stretch_plan_to_navigation_work_out"
+            app:destination="@id/navigation_work_out" />
+        <action
+            android:id="@+id/action_navigation_stretch_plan_to_navigation_select_action"
+            app:destination="@id/navigation_select_action"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_exercise"
+        android:name="me.shangdelu.stretchez.StretchExerciseFragment"
+        tools:layout="@layout/fragment_stretch_exercise">
+        <action
+            android:id="@+id/action_navigation_exercise_to_navigation_exercise_list"
+            app:destination="@id/navigation_exercise_list"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_work_out"
+        android:name="me.shangdelu.stretchez.WorkOutFragment"
+        tools:layout="@layout/fragment_work_out">
+        <action
+            android:id="@+id/action_navigation_work_out_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_select_action"
+        android:name="me.shangdelu.stretchez.SelectActionFragment"
+        tools:layout="@layout/fragment_action_list">
+    </fragment>
+
+</navigation>

@@ -40,6 +40,10 @@
     <string name="stretch_exercise_description">Enter a description for the Stretch Exercise</string>
     <string name="stretch_exercise_link">Enter the link to the Stretch Exercise</string>
     <string name="new_exercise">New Exercise</string>
+    <string name="title_home">Home</string>
+    <string name="title_exercises">Exercises</string>
+    <string name="title_stretch_plans">Stretch Plans</string>
+    <string name="title_stretch_plan">Stretch Plan</string>
 
     <string name="raspberry_test">Pi Test</string>
     <string name="test_button">Test</string>
@@ -48,4 +52,6 @@
     <string name="upload_button">Upload</string>
     <string name="upload_stretchPlan_button">Upload StretchPlan</string>
     <string name="upload_stretchPlan_test">Upload StretchPlan Test</string>
+    <string name="title_activity_bottom_navigation_main">BottomNavigationMainActivity</string>
+
 </resources>

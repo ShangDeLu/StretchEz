@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
@@ -59,18 +60,12 @@ class StretchPlanFragment : Fragment() {
 
         //Button to stretching
         stretchPlanStartButton.setOnClickListener {
-            val workoutFragment = WorkOutFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, workoutFragment)
-            transaction.commit()
+            findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_work_out)
         }
 
         //Button to view available stretching exercises
         selectActionButton.setOnClickListener {
-            val selectActionFragment = SelectActionFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, selectActionFragment)
-            transaction.commit()
+            findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_select_action)
         }
 
         //Button to save current stretch plan
@@ -84,12 +79,9 @@ class StretchPlanFragment : Fragment() {
                         id = stretchPlanId!!,
                         title = stretchPlanTitle.text.toString(),
                         description = stretchPlanDescription.text.toString(), duration = 60
-                    )
-                    )
-                    val stretchPlanListFragment = StretchPlanListFragment()
-                    val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.fragment_container, stretchPlanListFragment)
-                    transaction.commit()
+                    ))
+                    findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_stretch_plan_list)
+
                 } else { //when creating new plan, option = 1
                     stretchPlanRepository.addStretchPlan(
                         StretchPlan(
@@ -97,21 +89,14 @@ class StretchPlanFragment : Fragment() {
                             description = stretchPlanDescription.text.toString(), duration = 60
                     )
                     )
-                    val stretchPlanListFragment = StretchPlanListFragment()
-                    val transaction: FragmentTransaction =
-                        parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.fragment_container, stretchPlanListFragment)
-                    transaction.commit()
+                    findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_stretch_plan_list)
                 }
             }
         }
 
         //Button to return to list of stretch plan
         stretchPlanCancelButton.setOnClickListener {
-            val stretchPlanListFragment = StretchPlanListFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container, stretchPlanListFragment)
-            transaction.commit()
+            findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_stretch_plan_list)
         }
 
         return view
@@ -135,14 +120,10 @@ class StretchPlanFragment : Fragment() {
     }
 
     companion object {
-        // Fragment Arguments pass plan ID from MainActivity to StretchPlanFragment
-        fun newInstance(stretchPlanId: UUID, option: Int): StretchPlanFragment {
-            val args = Bundle().apply {
+        fun newInstance(stretchPlanId: UUID, option: Int): Bundle {
+            return Bundle().apply {
                 putSerializable(ARG_STRETCH_PLAN_ID, stretchPlanId)
                 putInt("Option", option)
-            }
-            return StretchPlanFragment().apply {
-                arguments = args
             }
         }
     }

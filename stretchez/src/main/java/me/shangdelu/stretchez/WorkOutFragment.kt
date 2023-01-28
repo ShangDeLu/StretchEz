@@ -13,7 +13,8 @@ import android.widget.TextView
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import me.shangdelu.stretchez.ui.main.StretchStartFragment
+import androidx.navigation.fragment.findNavController
+import me.shangdelu.stretchez.ui.main.ui.home.StretchStartFragment
 import java.util.concurrent.TimeUnit
 
 class WorkOutFragment : Fragment() {
@@ -73,6 +74,7 @@ class WorkOutFragment : Fragment() {
 
             //Button to repeat current exercise
             repeatButton.setOnClickListener {
+                //TODO: Reset the timer instead of replace the fragment
                 val workoutFragment = WorkOutFragment()
                 val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
                 transaction.replace(R.id.fragment_container, workoutFragment)
@@ -81,10 +83,7 @@ class WorkOutFragment : Fragment() {
 
             //Button to return to home screen
             returnButton.setOnClickListener {
-                val stretchStartFragment = StretchStartFragment()
-                val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, stretchStartFragment)
-                transaction.commit()
+                findNavController().navigate(R.id.action_navigation_work_out_to_navigation_home)
             }
         }
     }
