@@ -35,12 +35,9 @@ class WorkOutFragment : Fragment() {
         cdTimerText = view.findViewById(R.id.cdTimer) as TextView
         videoView = view.findViewById(R.id.workOutVideo) as VideoView
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
-        videoView.setOnPreparedListener(object: MediaPlayer.OnPreparedListener {
-            override fun onPrepared(mp: MediaPlayer?) {
-                mp?.isLooping = true //loop the demonstration of current exercise
-            }
-
-        })
+        videoView.setOnPreparedListener { mp ->
+            mp?.isLooping = true //loop the demonstration of current exercise
+        }
         videoView.requestFocus()
         videoView.start()
 
@@ -57,6 +54,22 @@ class WorkOutFragment : Fragment() {
         countDownTimer.start()
     }
 
+    private fun repeat() {
+        //reset the countDownTimer and start it
+        countDownTimer.cancel()
+        countDownTimer.start()
+        //reset video path, requestFocus and start playing
+        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
+        videoView.setOnPreparedListener { mp ->
+            mp?.isLooping = true //loop the demonstration of current exercise
+        }
+        videoView.requestFocus()
+        videoView.start()
+        //hide the repeat and return button
+        congratulations?.visibility = View.INVISIBLE
+        finishLayout.visibility = View.INVISIBLE
+    }
+
 
     private var countDownTimer = object : CountDownTimer(30000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
@@ -67,6 +80,7 @@ class WorkOutFragment : Fragment() {
         }
 
         override fun onFinish() {
+            //will stop and release the media player instance and move to idle state
             videoView.stopPlayback()
             cdTimerText?.text = getString(R.string.complete_time)
             congratulations?.visibility = View.VISIBLE  //show congratulations after stretching
@@ -75,10 +89,7 @@ class WorkOutFragment : Fragment() {
             //Button to repeat current exercise
             repeatButton.setOnClickListener {
                 //TODO: Reset the timer instead of replace the fragment
-                val workoutFragment = WorkOutFragment()
-                val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-                transaction.replace(R.id.fragment_container, workoutFragment)
-                transaction.commit()
+                repeat()
             }
 
             //Button to return to home screen
