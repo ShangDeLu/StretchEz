@@ -1,18 +1,20 @@
 package me.shangdelu.stretchez
 
 import androidx.lifecycle.ViewModel
+import me.shangdelu.stretchez.database.StretchExercise
 
 class SelectActionListViewModel : ViewModel() {
+    private val selectActionRepository = StretchPlanRepository.get()
+    val selectActionLiveData = selectActionRepository.getTemplateExercises()
 
-    val actions = mutableListOf<Action>()
+    //add planID to template exercise selected and add to db
+    fun addStretchExercise(exercise: StretchExercise) {
+        selectActionRepository.addExerciseToPlan(exercise)
+    }
 
-    init {
-        //testing, need update stretching exercise with demo
-        for (i in 0 until 10) {
-            val action = Action()
-            action.title = "Action #$i"
-            actions += action
-        }
+    //delete exercise of a plan when exercise is no longer being selected
+    fun deleteExercise(exercise: StretchExercise) {
+        selectActionRepository.deleteExercise(exercise)
     }
 
 }

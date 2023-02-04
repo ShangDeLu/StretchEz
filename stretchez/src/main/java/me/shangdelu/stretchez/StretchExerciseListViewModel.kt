@@ -3,8 +3,8 @@ package me.shangdelu.stretchez
 import androidx.lifecycle.ViewModel
 import me.shangdelu.stretchez.database.StretchExercise
 
-
 class StretchExerciseListViewModel: ViewModel() {
+
     private val stretchExerciseRepository = StretchPlanRepository.get()
     val stretchExerciseLiveData = stretchExerciseRepository.getTemplateExercises()
 

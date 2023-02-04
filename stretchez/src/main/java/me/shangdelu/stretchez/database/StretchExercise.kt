@@ -12,4 +12,5 @@ data class StretchExercise (@PrimaryKey(autoGenerate = true) var exerciseID: Int
                             var exerciseName: String = "",
                             var exerciseDescription: String = "",
                             var exerciseDuration: Int = 0,
-                            var exerciseLink: String = "")
+                            var exerciseLink: String = "",
+                            var order: Int = -1)
