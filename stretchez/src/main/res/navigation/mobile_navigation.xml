@@ -76,6 +76,18 @@
         android:id="@+id/navigation_select_action"
         android:name="me.shangdelu.stretchez.SelectActionFragment"
         tools:layout="@layout/fragment_action_list">
+        <action
+            android:id="@+id/action_navigation_select_action_to_navigation_bottom_sheet_action"
+            app:destination="@+id/navigation_bottom_sheet_action"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_bottom_sheet_action"
+        android:name="me.shangdelu.stretchez.BottomSheetActionListFragment"
+        tools:layout="@layout/fragment_bottom_sheet_action_list">
+        <action
+            android:id="@+id/action_navigation_bottom_sheet_action_to_navigation_select_action"
+            app:destination="@+id/navigation_select_action"/>
     </fragment>
 
 </navigation>

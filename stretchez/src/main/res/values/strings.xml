@@ -44,6 +44,8 @@
     <string name="title_exercises">Exercises</string>
     <string name="title_stretch_plans">Stretch Plans</string>
     <string name="title_stretch_plan">Stretch Plan</string>
+    <string name="add_new_action">Add New Exercises</string>
+    <string name="remove_action_snackbar">Exercise Removed</string>
 
     <string name="raspberry_test">Pi Test</string>
     <string name="test_button">Test</string>

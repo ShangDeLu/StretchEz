@@ -63,9 +63,9 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
                 val position = viewHolder.bindingAdapterPosition
                 val currentId = adapter?.stretchPlans?.get(position)
                 currentId?.let {
-                    // get current timestamp of the stretch plan
+                    //get current timestamp of the stretch plan
                     it.timestamp = System.currentTimeMillis();
-                    // update the timestamp of current stretch plan
+                    //update the timestamp of current stretch plan
                     stretchPlanListViewModel.updateStretchPlan(it)
                 }
 

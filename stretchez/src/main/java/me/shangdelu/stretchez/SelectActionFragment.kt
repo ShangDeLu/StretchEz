@@ -1,17 +1,26 @@
 package me.shangdelu.stretchez
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
 import android.widget.TextView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import me.shangdelu.stretchez.database.StretchExercise
 import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
@@ -56,15 +65,35 @@ class SelectActionFragment : Fragment() {
         actionRecyclerView.layoutManager = LinearLayoutManager(context)
         actionRecyclerView.adapter = adapter
 
+        //Swipe to delete/deselect selected actions
+        val swipeToDeleteCallBack = object : SwipeToDeleteCallBack(context) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                val currentId = adapter?.actions?.get(position)
+                selectActionListViewModel.deleteExercise(currentId!!)
+
+                val deleteSnackbar = Snackbar.make(actionRecyclerView,
+                    R.string.remove_action_snackbar, Snackbar.LENGTH_LONG)
+
+                deleteSnackbar.setActionTextColor(Color.WHITE)
+                deleteSnackbar.show()
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallBack)
+        itemTouchHelper.attachToRecyclerView(actionRecyclerView)
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupMenu()
+
         //Used to register an observer on the LiveData instance and tie the life of the observation
         //to the life of another component, such as an activity or fragment.
-        selectActionListViewModel.selectActionLiveData.observe(viewLifecycleOwner)
+        selectActionListViewModel.getExercisesOfPlan(stretchPlanID).observe(viewLifecycleOwner)
         //Observer implementation, responsible for reacting to new data from the LiveData.
         //This code block executed whenever the LiveData's list gets updated.
         { actions ->
@@ -73,6 +102,36 @@ class SelectActionFragment : Fragment() {
                 updateUI(actions)
             }
         }
+    }
+
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+            //Populates the Menu instance with the item defines in file.
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.fragment_action_list, menu)
+            }
+
+            //Respond to MenuItem selection by open the bottom sheet fragment to select action.
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.new_action -> {
+                        showBottomSheet()
+                        true
+                    }
+                    else -> return onMenuItemSelected(menuItem)
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun showBottomSheet() {
+        val bottomSheet = BottomSheetActionListFragment()
+        adapter?.let {
+            //pass a bundle with stretchPlanID, argumentOption, and counts of current list of
+            //selected actions
+            BottomSheetActionListFragment.newInstance(stretchPlanID, argumentOption, it.itemCount)
+        }
+        bottomSheet.show(this.parentFragmentManager, "ModalBottomSheet")
     }
 
 
@@ -88,29 +147,25 @@ class SelectActionFragment : Fragment() {
         private lateinit var action: StretchExercise
 
         private val titleTextView: TextView = itemView.findViewById(R.id.action_title)
-        private val checkBox: CheckBox = itemView.findViewById(R.id.action_checkbox)
 
         //Code the binding in the holder, the adapter should know as little as possible about
         //the inner workings and details of the view holder.
         fun bind(action: StretchExercise) {
             this.action = action
             titleTextView.text = this.action.exerciseName
-            titleTextView.setOnClickListener {
-                //change the status of checkBox when clicked
-                checkBox.isChecked = !checkBox.isChecked
-                //TODO 1: Add a new BottomSheet Fragment
-                //TODO 2: Implement an Add Button on Top right of SelectActionFragment
-                //When Click the Add Button, BottomSheetFragment should pop up,
-                //and present all template actions for user to choose.
-                //User should only be able to choose one action per time
-                //TODO 3: Add new data to DB when exercise been selected
-                //TODO 4: Delete data from DB when exercise are no longer selected
-                //Use Swipe to Delete Feature
-                //TODO 5: SelectActionFragment should be a recycler view that shows all selected actions in order
-                //TODO 6: SelectActionFragment should determine if current plan is new or existing plan
-                //TODO 7: For existing plan, load exercises that are pre-selected and in right order
-                
-            }
+
+            //TODO 1: Add a new BottomSheet Fragment
+            //TODO 2: Implement an Add Button on Top right of SelectActionFragment
+            //When Click the Add Button, BottomSheetFragment should pop up,
+            //and present all template actions for user to choose.
+            //User should only be able to choose one action per time
+            //TODO 3: Add new data to DB when exercise been selected
+            //TODO 4: Delete data from DB when exercise are no longer selected
+            //Use Swipe to Delete Feature
+            //TODO 5: SelectActionFragment should be a recycler view that shows all selected actions in order
+            //TODO 6: SelectActionFragment should determine if current plan is new or existing plan
+            //TODO 7: For existing plan, load exercises that are pre-selected and in right order
+
         }
     }
 

@@ -9,7 +9,7 @@ interface StretchExerciseDao {
     //Use LiveData to pass data between threads and between different parts of the application.
     //LiveData is a data holder class, and Room is built to work with LiveData.
 
-    @Query("SELECT * FROM StretchExercise WHERE planID=(:planID) ORDER BY order ASC")
+    @Query("SELECT * FROM StretchExercise WHERE planID=(:planID) ORDER BY orderNumber ASC")
     //use planID to get all the exercises in that plan
     fun getExercisesOfPlan(planID: UUID?): LiveData<List<StretchExercise>>
 
