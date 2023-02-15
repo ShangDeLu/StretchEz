@@ -118,6 +118,7 @@ class SelectActionFragment : Fragment() {
                         showBottomSheet()
                         true
                     }
+                    //TODO: Fix the app crashing from returning
                     else -> return onMenuItemSelected(menuItem)
                 }
             }
@@ -125,13 +126,12 @@ class SelectActionFragment : Fragment() {
     }
 
     private fun showBottomSheet() {
-        val bottomSheet = BottomSheetActionListFragment()
-        adapter?.let {
-            //pass a bundle with stretchPlanID, argumentOption, and counts of current list of
-            //selected actions
+        //pass a bundle with stretchPlanID, argumentOption, and counts of current list of
+        //selected actions
+        val bottomSheet = adapter?.let {
             BottomSheetActionListFragment.newInstance(stretchPlanID, argumentOption, it.itemCount)
         }
-        bottomSheet.show(this.parentFragmentManager, "ModalBottomSheet")
+        bottomSheet?.show(this.parentFragmentManager, "ModalBottomSheet")
     }
 
 

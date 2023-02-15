@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -144,13 +143,16 @@ class BottomSheetActionListFragment : BottomSheetDialogFragment() {
 
     companion object {
         private const val TAG = "ModalBottomSheet"
-        fun newInstance(stretchPlanID: UUID?, option: Int, listLength: Int): Bundle {
+        fun newInstance(stretchPlanID: UUID?, option: Int, listLength: Int): BottomSheetActionListFragment {
             //This Bundle contains key-value pairs that work just like the intent extras of an Activity.
             //Each pair is known as an argument.
-            return Bundle().apply {
+            val args = Bundle().apply {
                 putSerializable(ARG_PLAN_ID, stretchPlanID)
                 putInt("Option", option)
                 putInt("ListLength", listLength)
+            }
+            return BottomSheetActionListFragment().apply {
+                arguments = args
             }
         }
     }
