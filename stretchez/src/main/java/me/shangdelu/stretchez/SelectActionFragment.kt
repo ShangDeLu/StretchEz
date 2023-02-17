@@ -119,7 +119,9 @@ class SelectActionFragment : Fragment() {
                         true
                     }
                     //TODO: Fix the app crashing from returning
-                    else -> return onMenuItemSelected(menuItem)
+                    //Ask if return false can be used instead of super.onMenuItemSelected(menuItem)
+                    else -> return false
+                    //onMenuItemSelected(menuItem)
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
