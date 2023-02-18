@@ -46,9 +46,9 @@ class SelectActionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         stretchPlan = StretchPlan()
+        selectActionRepository = StretchPlanRepository.get()
         //Retrieve stretchPlanID from the fragment arguments
         stretchPlanID = arguments?.getSerializable(ARG_PLAN_ID) as UUID?
-        selectActionRepository = StretchPlanRepository.get()
         argumentOption = arguments?.getInt("Option") ?: 0
     }
 
@@ -118,14 +118,13 @@ class SelectActionFragment : Fragment() {
                         showBottomSheet()
                         true
                     }
-                    //TODO: Fix the app crashing from returning
-                    //Ask if return false can be used instead of super.onMenuItemSelected(menuItem)
+                    //return false when the MenuItem cannot be handled by the MenuProvider.
                     else -> return false
-                    //onMenuItemSelected(menuItem)
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
 
     private fun showBottomSheet() {
         //pass a bundle with stretchPlanID, argumentOption, and counts of current list of
@@ -155,19 +154,6 @@ class SelectActionFragment : Fragment() {
         fun bind(action: StretchExercise) {
             this.action = action
             titleTextView.text = this.action.exerciseName
-
-            //TODO 1: Add a new BottomSheet Fragment
-            //TODO 2: Implement an Add Button on Top right of SelectActionFragment
-            //When Click the Add Button, BottomSheetFragment should pop up,
-            //and present all template actions for user to choose.
-            //User should only be able to choose one action per time
-            //TODO 3: Add new data to DB when exercise been selected
-            //TODO 4: Delete data from DB when exercise are no longer selected
-            //Use Swipe to Delete Feature
-            //TODO 5: SelectActionFragment should be a recycler view that shows all selected actions in order
-            //TODO 6: SelectActionFragment should determine if current plan is new or existing plan
-            //TODO 7: For existing plan, load exercises that are pre-selected and in right order
-
         }
     }
 

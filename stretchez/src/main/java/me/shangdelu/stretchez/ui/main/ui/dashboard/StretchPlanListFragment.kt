@@ -123,7 +123,8 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
                         //return true once the MenuItem is handled, indicating no further processing is necessary.
                         true
                     }
-                    else -> return onMenuItemSelected(menuItem)
+                    //return false when the MenuItem cannot be handled by the MenuProvider.
+                    else -> return false
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)

@@ -26,7 +26,8 @@ class StretchPlanFragment : Fragment() {
     private lateinit var stretchPlanSaveButton: Button
     private lateinit var stretchPlanCancelButton: Button
     private lateinit var stretchPlanRepository: StretchPlanRepository
-    private lateinit var argument: Bundle
+    private lateinit var argumentSelectAction: Bundle
+    private lateinit var argumentWorkOut: Bundle
     private var argumentOption: Int = 0
     private var stretchPlanId: UUID? = null
     private val stretchPlanDetailViewModel: StretchPlanDetailViewModel by lazy {
@@ -42,8 +43,11 @@ class StretchPlanFragment : Fragment() {
         }
         stretchPlanRepository = StretchPlanRepository.get()
         argumentOption = arguments?.getInt("Option") ?: 0
-        //Put stretchPlanId and argumentOption into a bundle
-        argument = SelectActionFragment.newInstance(stretchPlanId, argumentOption)
+        //Put stretchPlanId and argumentOption into a bundle for selectActionFragment
+        argumentSelectAction = SelectActionFragment.newInstance(stretchPlanId, argumentOption)
+        //Put stretchPlanId and argumentOption into a bundle for WorkOutFragment
+        argumentWorkOut = WorkOutFragment.newInstance(stretchPlanId, argumentOption)
+
     }
 
     override fun onCreateView(
@@ -62,14 +66,15 @@ class StretchPlanFragment : Fragment() {
 
         //Button to stretching
         stretchPlanStartButton.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_work_out)
+            //pass the bundle to workOutFragment
+            findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_work_out, argumentWorkOut)
         }
 
         //Button to view available stretching exercises
         selectActionButton.setOnClickListener {
             //pass the bundle to selectActionFragment
             findNavController().navigate(
-                R.id.action_navigation_stretch_plan_to_navigation_select_action, argument)
+                R.id.action_navigation_stretch_plan_to_navigation_select_action, argumentSelectAction)
         }
 
         //Button to save current stretch plan

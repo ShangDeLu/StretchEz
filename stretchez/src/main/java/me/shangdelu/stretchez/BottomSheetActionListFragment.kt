@@ -112,18 +112,6 @@ class BottomSheetActionListFragment : BottomSheetDialogFragment() {
         }
     }
 
-    //TODO 1: Add a new BottomSheet Fragment
-    //TODO 2: Implement an Add Button on Top right of SelectActionFragment
-    //When Click the Add Button, BottomSheetFragment should pop up,
-    //and present all template actions for user to choose.
-    //User should only be able to choose one action per time
-    //TODO 3: Add new data to DB when exercise been selected
-    //TODO 4: Delete data from DB when exercise are no longer selected
-    //Use Swipe to Delete Feature
-    //TODO 5: SelectActionFragment should be a recycler view that shows all selected actions in order
-    //TODO 6: SelectActionFragment should determine if current plan is new or existing plan
-    //TODO 7: For existing plan, load exercises that are pre-selected and in right order
-
     private inner class ActionAdapter(var actions: List<StretchExercise>)
         : RecyclerView.Adapter<ActionHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ActionHolder {
