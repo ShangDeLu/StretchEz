@@ -43,10 +43,12 @@ class StretchPlanFragment : Fragment() {
         }
         stretchPlanRepository = StretchPlanRepository.get()
         argumentOption = arguments?.getInt("Option") ?: 0
+        //length of interval between exercises, default at 5 for now, could be parameter of data class later.
+        val interval: Int = 5
         //Put stretchPlanId and argumentOption into a bundle for selectActionFragment
         argumentSelectAction = SelectActionFragment.newInstance(stretchPlanId, argumentOption)
-        //Put stretchPlanId and argumentOption into a bundle for WorkOutFragment
-        argumentWorkOut = WorkOutFragment.newInstance(stretchPlanId, argumentOption)
+        //Put stretchPlanId, argumentOption and interval into a bundle for WorkOutFragment
+        argumentWorkOut = WorkOutFragment.newInstance(stretchPlanId, argumentOption, interval)
 
     }
 

@@ -1,5 +1,6 @@
 package me.shangdelu.stretchez
 
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -31,7 +32,14 @@ class WorkOutFragment : Fragment() {
     private var stretchPlanID: UUID? = null
     private lateinit var exercises: List<StretchExercise>
     //Index of current Exercise in list of stretchExercise
-    var currentExercise = 0
+    private var currentExercise = 0
+    //length of interval between exercises
+    private var interval = 0
+    //global variable for MediaPlayer to implement pause and resume feature
+    private lateinit var mediaPlayer: MediaPlayer
+    //boolean flag to determine the state of mediaPlayer
+    private var playingFlag: Boolean = true
+
     //Associate the Fragment with the ViewModel
     private val workOutFragmentViewModel: WorkOutFragmentViewModel by lazy {
         ViewModelProvider(this)[WorkOutFragmentViewModel::class.java]
@@ -42,6 +50,8 @@ class WorkOutFragment : Fragment() {
         workOutRepository = StretchPlanRepository.get()
         //Retrieve stretchPlanID from the fragment arguments
         stretchPlanID = arguments?.getSerializable(ARG_PLAN_ID) as UUID?
+        //Retrieve interval from the fragment arguments
+        interval = arguments?.getInt("Interval") ?: 0
     }
 
     override fun onCreateView(
@@ -54,6 +64,8 @@ class WorkOutFragment : Fragment() {
         workOutFragmentViewModel.getExercisesOfPlan(stretchPlanID).observe(viewLifecycleOwner) {
             //retrieve the list of exercises of stretchPlanID from LiveData
             exercises = it
+            //TODO: Consider about using Queue instead of a list
+            //TODO: Consider about returning to previous exercise if Queue is used instead
         }
 
         cdTimerText = view.findViewById(R.id.cdTimer) as TextView
@@ -62,14 +74,32 @@ class WorkOutFragment : Fragment() {
         //videoView.setVideoURI(Uri.parse(exercises[currentExercise].exerciseLink))
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
         videoView.setOnPreparedListener { mp ->
-            mp?.isLooping = true //loop the demonstration of current exercise
+            //get a reference of mp
+            mediaPlayer = mp
+            //loop the demonstration of current exercise
+            mp.isLooping = true
         }
+
         videoView.start()
 
         finishLayout = view.findViewById(R.id.finish_layout) as LinearLayout
         congratulations = view.findViewById(R.id.congratulations) as TextView
         repeatButton = view.findViewById(R.id.repeat_button) as Button
         returnButton = view.findViewById(R.id.return_button) as Button
+
+        //TODO: Implement the pause feature when user press the screen
+        //TODO 2: CountdownTimer need to pause and resume as well
+        videoView.setOnClickListener {
+            playingFlag = if (playingFlag) {
+                //if mediaPlayer is currently playing, pause it and change the state of flag
+                mediaPlayer.pause()
+                false
+            } else {
+                //if mediaPlayer is currently pausing, start it and change the state of flag
+                mediaPlayer.start()
+                true
+            }
+        }
 
         return view
     }
@@ -96,7 +126,7 @@ class WorkOutFragment : Fragment() {
     }
 
 
-    private var countDownTimer = object : CountDownTimer(exercises[currentExercise].exerciseDuration.toLong() * 1000, 1000) {
+    private var countDownTimer = object : CountDownTimer(30000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
             cdTimerText?.text = getString(
                 R.string.formatted_time,
@@ -148,12 +178,13 @@ class WorkOutFragment : Fragment() {
 
 
     companion object {
-        fun newInstance(stretchPlanID: UUID?, option: Int): Bundle {
+        fun newInstance(stretchPlanID: UUID?, option: Int, interval: Int): Bundle {
             //This Bundle contains key-value pairs that work just like the intent extras of an Activity.
             //Each pair is known as an argument.
             return Bundle().apply {
                 putSerializable(ARG_PLAN_ID, stretchPlanID)
                 putInt("Option", option)
+                putInt("Interval", interval)
             }
         }
     }
