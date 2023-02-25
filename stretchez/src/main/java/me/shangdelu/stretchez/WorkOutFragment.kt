@@ -35,10 +35,17 @@ class WorkOutFragment : Fragment() {
     private var currentExercise = 0
     //length of interval between exercises
     private var interval = 0
-    //global variable for MediaPlayer to implement pause and resume feature
+    //variable for MediaPlayer to implement pause and resume feature
     private lateinit var mediaPlayer: MediaPlayer
     //boolean flag to determine the state of mediaPlayer
     private var playingFlag: Boolean = true
+    //variable for timer to be accessed by other function
+    private lateinit var timer: CountDownTimer
+    //variable for remaining time on the timer
+    private var timeRemain: Long = 0
+    //initialize ExerciseControl
+    private val exerciseControl = ExerciseControl()
+    private var intervalTextView: TextView? = null
 
     //Associate the Fragment with the ViewModel
     private val workOutFragmentViewModel: WorkOutFragmentViewModel by lazy {
@@ -64,8 +71,10 @@ class WorkOutFragment : Fragment() {
         workOutFragmentViewModel.getExercisesOfPlan(stretchPlanID).observe(viewLifecycleOwner) {
             //retrieve the list of exercises of stretchPlanID from LiveData
             exercises = it
-            //TODO: Consider about using Queue instead of a list
-            //TODO: Consider about returning to previous exercise if Queue is used instead
+            //Get the first exercise of the plan
+            val current = firstExercise()
+            //Start the countdown timer
+            timerStart(current.exerciseDuration.toLong() * 1000)
         }
 
         cdTimerText = view.findViewById(R.id.cdTimer) as TextView
@@ -80,45 +89,46 @@ class WorkOutFragment : Fragment() {
             mp.isLooping = true
         }
 
+        //Start playing the exercise video
         videoView.start()
 
         finishLayout = view.findViewById(R.id.finish_layout) as LinearLayout
         congratulations = view.findViewById(R.id.congratulations) as TextView
         repeatButton = view.findViewById(R.id.repeat_button) as Button
         returnButton = view.findViewById(R.id.return_button) as Button
+        intervalTextView = view.findViewById(R.id.interval_textView) as TextView
 
         //TODO: Implement the pause feature when user press the screen
         //TODO 2: CountdownTimer need to pause and resume as well
         videoView.setOnClickListener {
-            playingFlag = if (playingFlag) {
+            if (playingFlag) {
                 //if mediaPlayer is currently playing, pause it and change the state of flag
                 mediaPlayer.pause()
-                false
+                playingFlag = false
+                //Pause the countdown timer
+                timerPause()
             } else {
                 //if mediaPlayer is currently pausing, start it and change the state of flag
                 mediaPlayer.start()
-                true
+                playingFlag = true
+                //Resume the countdown timer
+                timerResume()
             }
         }
 
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        countDownTimer.start()
+    private fun firstExercise(): StretchExercise {
+        return exerciseControl.getCurrent(exercises)
     }
 
     private fun repeat() {
         //reset the countDownTimer and start it
-        countDownTimer.cancel()
-        countDownTimer.start()
+        val reset = exerciseControl.reset(exercises)
+        timerStart(reset.exerciseDuration.toLong() * 1000)
         //reset video path and start playing
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
-        videoView.setOnPreparedListener { mp ->
-            mp?.isLooping = true //loop the demonstration of current exercise
-        }
-
         videoView.start()
         //hide the repeat and return button
         congratulations?.visibility = View.INVISIBLE
@@ -126,55 +136,97 @@ class WorkOutFragment : Fragment() {
     }
 
 
-    private var countDownTimer = object : CountDownTimer(30000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            cdTimerText?.text = getString(
-                R.string.formatted_time,
-                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60,
-             TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60)
-        }
+    private fun intervalStart(timeLengthMilli: Long) {
+        //Hide videoView
+        videoView.visibility = View.INVISIBLE
+        //Show the intervalTextView
+        intervalTextView?.visibility = View.VISIBLE
+        val nextExercise = resources.getString(R.string.next_exercise) + " " + exerciseControl.peekNext(exercises).exerciseName
+        intervalTextView?.text = nextExercise
+        val next = exerciseControl.moveNext(exercises) //move to the next exercise
+        //setVideoURI as the link of next exercise in the stretchPlan
+        //videoView.setVideoURI(Uri.parse(next.exerciseLink))
+        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch2))
 
-        override fun onFinish() {
-            //if currentExercise is not the last exercise of the stretchPlan
-            if (currentExercise != exercises.size - 1) {
-                currentExercise++ //move to the next exercise
-                //stop and release the media player instance and move to idle state
-                videoView.stopPlayback()
-                //setVideoURI as the link of next exercise in the stretchPlan
-                //videoView.setVideoURI(Uri.parse(exercises[currentExercise].exerciseLink))
-                videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
+        val intervalTimer = object : CountDownTimer(timeLengthMilli, 1000) {
+            override fun onTick(milliTillFinish: Long) {
+                cdTimerText?.text = getString(
+                    R.string.formatted_time,
+                    TimeUnit.MILLISECONDS.toMinutes(milliTillFinish) % 60,
+                    TimeUnit.MILLISECONDS.toSeconds(milliTillFinish) % 60)
+            }
+            override fun onFinish() {
+                //Hide intervalTextView
+                intervalTextView?.visibility = View.GONE
+                //Show videoView
+                videoView.visibility = View.VISIBLE
+
                 //reset the countDownTimer and start it
-                this.cancel()
-                this.start()
+                timerStart(next.exerciseDuration.toLong() * 1000)
                 //start playing the next exercise
                 videoView.start()
-            } else {
-                //currentExercise is the last exercise of the stretchPlan
-                //will stop and release the media player instance and move to idle state
-                videoView.stopPlayback()
-                cdTimerText?.text = getString(R.string.complete_time)
-                congratulations?.visibility = View.VISIBLE  //show congratulations after stretching
-                finishLayout.visibility = View.VISIBLE  //make repeat and return button visible
+            }
+        }
+        intervalTimer.start()
+    }
+    private fun timerStart(timeLengthMilli: Long) {
+        timer = object : CountDownTimer(timeLengthMilli, 1000) {
+            override fun onTick(milliTillFinish: Long) {
+                cdTimerText?.text = getString(
+                    R.string.formatted_time,
+                    TimeUnit.MILLISECONDS.toMinutes(milliTillFinish) % 60,
+                    TimeUnit.MILLISECONDS.toSeconds(milliTillFinish) % 60)
+                //record the remaining time
+                timeRemain = milliTillFinish
+            }
 
-                //Button to repeat current exercise
-                repeatButton.setOnClickListener {
-                    //Reset the timer instead of replace the fragment
-                    repeat()
-                }
+            override fun onFinish() {
+                //if currentExercise is not the last exercise of the stretchPlan
+                if (!exerciseControl.endOfList(exercises)) {
+                    //stop and release the media player instance and move to idle state
+                    videoView.stopPlayback()
+                    //Start the interval countdown timer
+                    intervalStart(interval.toLong() * 1000)
+                } else {
+                    //currentExercise is the last exercise of the stretchPlan
+                    //will stop and release the media player instance and move to idle state
+                    videoView.stopPlayback()
+                    cdTimerText?.text = getString(R.string.complete_time)
+                    congratulations?.visibility = View.VISIBLE  //show congratulations after stretching
+                    finishLayout.visibility = View.VISIBLE  //make repeat and return button visible
 
-                //Button to return to home screen
-                returnButton.setOnClickListener {
-                    findNavController().navigate(R.id.action_navigation_work_out_to_navigation_home)
+                    //Button to repeat current exercise
+                    repeatButton.setOnClickListener {
+                        //Reset the timer instead of replace the fragment
+                        repeat()
+                    }
+
+                    //Button to return to home screen
+                    returnButton.setOnClickListener {
+                        findNavController().navigate(R.id.action_navigation_work_out_to_navigation_home)
+                    }
                 }
             }
         }
+        timer.start()
     }
+
+    private fun timerPause() {
+        timer.cancel()
+    }
+
+    private fun timerResume() {
+        //start a new timer with the time remaining
+        timerStart(timeRemain)
+    }
+
 
     //TODO 1: Allow MediaPlayer to play multiple videos
     //TODO 2: When one video is done, notify user what the next video is with an interval
     //TODO 3: Allow user to pause during video, and pause between videos
     //TODO 4: User should be able to determine the length of the interval between videos
     //TODO 5: Consider about Unidirectional Architecture and responsibility chain
+    //TODO 6: Encapsulate moving next and moving back of Exercises in a separate class, so index cannot be accessed by other class
 
 
     companion object {

@@ -12,7 +12,7 @@
         android:id="@+id/cdTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/purple_500"
+        android:background="@color/blue"
         android:text="@string/testing_time"
         android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -21,7 +21,17 @@
     <VideoView
         android:id="@+id/workOutVideo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/interval_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="@string/next_exercise"
+        android:textSize="30sp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/congratulations"
