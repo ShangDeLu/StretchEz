@@ -33,14 +33,14 @@ class StretchStartFragment : Fragment() {
 //        uploadStretchPlan = view.findViewById(R.id.upload_stretchPlan_btn) as Button //set the button for upload stretchPlan
 
         //Button to the list of stretch plans
-        binding.stretchBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_stretch_plan_list)
-        }
-
-        //Button to the list of stretching exercises
-        binding.exerciseBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_exercise_list)
-        }
+//        binding.stretchBtn.setOnClickListener {
+//            findNavController().navigate(R.id.action_navigation_home_to_navigation_stretch_plan_list)
+//        }
+//
+//        //Button to the list of stretching exercises
+//        binding.exerciseBtn.setOnClickListener {
+//            findNavController().navigate(R.id.action_navigation_home_to_navigation_exercise_list)
+//        }
 
 //        //Button to the fragment testing data retrieving from remote
 //        piButton.setOnClickListener {

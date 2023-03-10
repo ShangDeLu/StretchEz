@@ -19,5 +19,8 @@
     <color name="light_grey">#dedddd</color>
     <color name="light_blue">#6977ab</color>
     <color name="light_green">#6dc275</color>
+    <color name="bright_lavender">#bf94e4</color>
+    <color name="light_pastel_purple">#b19cd9</color>
+    <color name="saturated_light_pastel_purple">#af94e1</color>
 
 </resources>

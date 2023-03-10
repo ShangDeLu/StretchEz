@@ -11,45 +11,49 @@
         android:id="@+id/welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/purple_500"
+        android:background="@drawable/rounded_corner_view"
         android:text="@string/welcome"
+        android:textStyle="bold|italic"
         android:textColor="@color/white"
         android:textSize="30sp"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.203" />
 
-    <Button
-        android:id="@+id/stretch_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:background="@color/purple_500"
-        android:text="@string/start_stretching"
-        android:textSize="20sp"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/welcome_message"
-        app:layout_constraintVertical_bias="0">
-    </Button>
+<!--    <Button-->
+<!--        android:id="@+id/stretch_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="120dp"-->
+<!--        android:background="@color/bright_lavender"-->
+<!--        android:text="@string/start_stretching"-->
+<!--        android:textSize="20sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/welcome_message"-->
+<!--        app:layout_constraintVertical_bias="0">-->
+<!--    </Button>-->
 
-    <Button
-        android:id="@+id/exercise_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/possible_exercises"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stretch_btn"
-        app:layout_constraintVertical_bias="0.3">
+<!--    <Button-->
+<!--        android:id="@+id/exercise_btn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/bright_lavender"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:text="@string/possible_exercises"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/stretch_btn"-->
+<!--        app:layout_constraintVertical_bias="0.3">-->
 
-    </Button>
+<!--    </Button>-->
 
 <!--    <Button-->
 <!--        android:id="@+id/pi_btn"-->

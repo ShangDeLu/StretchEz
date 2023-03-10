@@ -98,8 +98,6 @@ class WorkOutFragment : Fragment() {
         returnButton = view.findViewById(R.id.return_button) as Button
         intervalTextView = view.findViewById(R.id.interval_textView) as TextView
 
-        //TODO: Implement the pause feature when user press the screen
-        //TODO 2: CountdownTimer need to pause and resume as well
         videoView.setOnClickListener {
             if (playingFlag) {
                 //if mediaPlayer is currently playing, pause it and change the state of flag
@@ -220,13 +218,9 @@ class WorkOutFragment : Fragment() {
         timerStart(timeRemain)
     }
 
-
-    //TODO 1: Allow MediaPlayer to play multiple videos
-    //TODO 2: When one video is done, notify user what the next video is with an interval
-    //TODO 3: Allow user to pause during video, and pause between videos
-    //TODO 4: User should be able to determine the length of the interval between videos
-    //TODO 5: Consider about Unidirectional Architecture and responsibility chain
-    //TODO 6: Encapsulate moving next and moving back of Exercises in a separate class, so index cannot be accessed by other class
+    //TODO: Make Improvement on App's UI
+    //TODO 2: Convert fragment_work_out from LinearLayout to ConstraintLayout
+    //TODO 3: Make fragment_work_out looks cleaner
 
 
     companion object {

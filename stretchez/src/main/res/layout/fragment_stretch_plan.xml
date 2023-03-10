@@ -22,6 +22,8 @@
         android:id="@+id/select_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bright_lavender"
+        android:textColor="@color/white"
         android:text="@string/select_action"/>
 
     <TextView
@@ -46,6 +48,8 @@
         android:id="@+id/stretch_plan_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/bright_lavender"
+        android:textColor="@color/white"
         android:text="@string/stretch_plan_start_button" />
 
     <LinearLayout
@@ -59,6 +63,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:layout_margin="5dp"
+            android:background="@color/bright_lavender"
+            android:textColor="@color/white"
             android:text="@string/save_button"/>
 
         <Button
@@ -66,6 +73,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
+            android:layout_margin="5dp"
+            android:background="@color/bright_lavender"
+            android:textColor="@color/white"
             android:text="@string/return_button"/>
 
     </LinearLayout>

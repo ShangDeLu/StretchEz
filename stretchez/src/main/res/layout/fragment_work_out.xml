@@ -12,7 +12,7 @@
         android:id="@+id/cdTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
+        android:background="@color/bright_lavender"
         android:text="@string/testing_time"
         android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
@@ -53,6 +53,7 @@
             android:id="@+id/repeat_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/bright_lavender"
             android:text="@string/repeat_button"
             android:textColor="@color/white"
             android:textSize="30sp"/>
@@ -61,6 +62,7 @@
             android:id="@+id/return_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/bright_lavender"
             android:text="@string/return_button"
             android:textColor="@color/white"
             android:textSize="30sp"/>
