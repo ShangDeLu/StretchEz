@@ -79,8 +79,8 @@ class StretchPlanFragment : Fragment() {
                 R.id.action_navigation_stretch_plan_to_navigation_select_action, argumentSelectAction)
         }
 
-        //TODO 1: Should selectActionButton be hided when current plan is a new plan.
-        //TODO 2: Fix the padding problem of StretchPlan List and StretchExercise List.
+        //TODO 1: selectActionButton should be hided when current plan is a new plan.
+        //TODO 2: stretchPlanStartButton should be hided when current plan is a new plan.
 
         //Button to save current stretch plan
         stretchPlanSaveButton.setOnClickListener {

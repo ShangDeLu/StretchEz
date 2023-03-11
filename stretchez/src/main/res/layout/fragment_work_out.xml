@@ -12,9 +12,10 @@
         android:id="@+id/cdTimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/bright_lavender"
+        android:background="@drawable/rounded_corner_view_bright_lavender"
         android:text="@string/testing_time"
         android:textColor="@color/white"
+        android:padding="10dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textSize="50sp"/>
 
@@ -28,19 +29,12 @@
         android:id="@+id/interval_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:text="@string/next_exercise"
-        android:textSize="30sp"
+        android:textSize="25sp"
+        android:padding="10dp"
+        android:background="@drawable/rounded_corner_view_bright_lavender"
         android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/congratulations"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/finish_stretching"
-        android:textColor="@color/black"
-        android:textSize="40sp"
-        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/finish_layout"
@@ -53,19 +47,21 @@
             android:id="@+id/repeat_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/bright_lavender"
+            android:background="@drawable/rounded_corner_view_bright_lavender"
             android:text="@string/repeat_button"
             android:textColor="@color/white"
-            android:textSize="30sp"/>
+            android:layout_margin="5dp"
+            android:textSize="14sp"/>
 
         <Button
             android:id="@+id/return_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/bright_lavender"
+            android:background="@drawable/rounded_corner_view_bright_lavender"
             android:text="@string/return_button"
             android:textColor="@color/white"
-            android:textSize="30sp"/>
+            android:layout_margin="5dp"
+            android:textSize="14sp"/>
 
     </LinearLayout>
 

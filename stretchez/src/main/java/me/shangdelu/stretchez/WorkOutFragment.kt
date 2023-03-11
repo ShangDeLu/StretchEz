@@ -24,7 +24,6 @@ class WorkOutFragment : Fragment() {
 
     private var cdTimerText: TextView? = null
     private lateinit var videoView: VideoView
-    private var congratulations: TextView? = null
     private lateinit var repeatButton: Button
     private lateinit var returnButton: Button
     private lateinit var finishLayout: LinearLayout
@@ -93,7 +92,6 @@ class WorkOutFragment : Fragment() {
         videoView.start()
 
         finishLayout = view.findViewById(R.id.finish_layout) as LinearLayout
-        congratulations = view.findViewById(R.id.congratulations) as TextView
         repeatButton = view.findViewById(R.id.repeat_button) as Button
         returnButton = view.findViewById(R.id.return_button) as Button
         intervalTextView = view.findViewById(R.id.interval_textView) as TextView
@@ -129,7 +127,6 @@ class WorkOutFragment : Fragment() {
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
         videoView.start()
         //hide the repeat and return button
-        congratulations?.visibility = View.INVISIBLE
         finishLayout.visibility = View.INVISIBLE
     }
 
@@ -190,7 +187,6 @@ class WorkOutFragment : Fragment() {
                     //will stop and release the media player instance and move to idle state
                     videoView.stopPlayback()
                     cdTimerText?.text = getString(R.string.complete_time)
-                    congratulations?.visibility = View.VISIBLE  //show congratulations after stretching
                     finishLayout.visibility = View.VISIBLE  //make repeat and return button visible
 
                     //Button to repeat current exercise

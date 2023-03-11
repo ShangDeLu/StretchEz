@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -42,6 +43,7 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
     private val stretchPlanListViewModel: StretchPlanListViewModel by lazy {
         ViewModelProvider(this)[StretchPlanListViewModel::class.java]
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
