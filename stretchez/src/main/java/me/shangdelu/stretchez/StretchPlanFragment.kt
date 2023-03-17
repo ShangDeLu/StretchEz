@@ -79,11 +79,17 @@ class StretchPlanFragment : Fragment() {
                 R.id.action_navigation_stretch_plan_to_navigation_select_action, argumentSelectAction)
         }
 
-        //TODO 1: selectActionButton should be hided when current plan is a new plan.
-        //TODO 2: stretchPlanStartButton should be hided when current plan is a new plan.
-        //TODO 3: ask about autofill hints for EditText.
-        //TODO 4: ask if the video view should be hided after the stretchPlan is completed.
 
+        //TODO 1: ask about autofill hints for EditText.
+        //TODO 2: consider about whether to use MediaController or not.
+        //TODO 3: make sure the VideoView is fixed size, d video resize to fit the VideoView.
+
+
+        if (argumentOption == 1) { //when creating new plan
+            //hide stretchPlanStartButton and selectActionButton
+            stretchPlanStartButton.visibility = View.GONE
+            selectActionButton.visibility = View.GONE
+        }
 
         //Button to save current stretch plan
         stretchPlanSaveButton.setOnClickListener {
@@ -104,8 +110,7 @@ class StretchPlanFragment : Fragment() {
                         StretchPlan(
                             title = stretchPlanTitle.text.toString(),
                             description = stretchPlanDescription.text.toString(), duration = 60
-                    )
-                    )
+                    ))
                     findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_stretch_plan_list)
                 }
             }

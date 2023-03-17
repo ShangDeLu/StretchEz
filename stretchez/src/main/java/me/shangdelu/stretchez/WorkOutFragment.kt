@@ -125,9 +125,9 @@ class WorkOutFragment : Fragment() {
         //reset video path and start playing
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
         videoView.start()
-        //hide the repeat and return button
-        repeatButton.visibility = View.INVISIBLE
-        returnButton.visibility = View.INVISIBLE
+        //make the repeat and return button disabled
+        repeatButton.isEnabled = false
+        returnButton.isEnabled = false
     }
 
 
@@ -141,7 +141,7 @@ class WorkOutFragment : Fragment() {
         val next = exerciseControl.moveNext(exercises) //move to the next exercise
         //setVideoURI as the link of next exercise in the stretchPlan
         //videoView.setVideoURI(Uri.parse(next.exerciseLink))
-        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch2))
+        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch3))
 
         val intervalTimer = object : CountDownTimer(timeLengthMilli, 1000) {
             override fun onTick(milliTillFinish: Long) {
@@ -187,9 +187,9 @@ class WorkOutFragment : Fragment() {
                     //will stop and release the media player instance and move to idle state
                     videoView.stopPlayback()
                     cdTimerText?.text = getString(R.string.complete_time)
-                    //make repeat and return button visible
-                    repeatButton.visibility = View.VISIBLE
-                    returnButton.visibility = View.VISIBLE
+                    //enable the repeat and return button
+                    repeatButton.isEnabled = true
+                    returnButton.isEnabled = true
                     //Button to repeat current exercise
                     repeatButton.setOnClickListener {
                         //Reset the timer instead of replace the fragment
@@ -215,9 +215,8 @@ class WorkOutFragment : Fragment() {
         timerStart(timeRemain)
     }
 
-    //TODO: Make Improvement on App's UI
-    //TODO 2: Convert fragment_work_out from LinearLayout to ConstraintLayout
-    //TODO 3: Make fragment_work_out looks cleaner
+    //TODO 1: Make Improvement on App's UI
+    //TODO 2: Make fragment_work_out looks cleaner
 
 
     companion object {
