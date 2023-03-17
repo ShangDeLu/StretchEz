@@ -81,6 +81,9 @@ class StretchPlanFragment : Fragment() {
 
         //TODO 1: selectActionButton should be hided when current plan is a new plan.
         //TODO 2: stretchPlanStartButton should be hided when current plan is a new plan.
+        //TODO 3: ask about autofill hints for EditText.
+        //TODO 4: ask if the video view should be hided after the stretchPlan is completed.
+
 
         //Button to save current stretch plan
         stretchPlanSaveButton.setOnClickListener {

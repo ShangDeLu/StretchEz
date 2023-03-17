@@ -91,7 +91,6 @@ class WorkOutFragment : Fragment() {
         //Start playing the exercise video
         videoView.start()
 
-        finishLayout = view.findViewById(R.id.finish_layout) as LinearLayout
         repeatButton = view.findViewById(R.id.repeat_button) as Button
         returnButton = view.findViewById(R.id.return_button) as Button
         intervalTextView = view.findViewById(R.id.interval_textView) as TextView
@@ -127,7 +126,8 @@ class WorkOutFragment : Fragment() {
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
         videoView.start()
         //hide the repeat and return button
-        finishLayout.visibility = View.INVISIBLE
+        repeatButton.visibility = View.INVISIBLE
+        returnButton.visibility = View.INVISIBLE
     }
 
 
@@ -187,8 +187,9 @@ class WorkOutFragment : Fragment() {
                     //will stop and release the media player instance and move to idle state
                     videoView.stopPlayback()
                     cdTimerText?.text = getString(R.string.complete_time)
-                    finishLayout.visibility = View.VISIBLE  //make repeat and return button visible
-
+                    //make repeat and return button visible
+                    repeatButton.visibility = View.VISIBLE
+                    returnButton.visibility = View.VISIBLE
                     //Button to repeat current exercise
                     repeatButton.setOnClickListener {
                         //Reset the timer instead of replace the fragment
