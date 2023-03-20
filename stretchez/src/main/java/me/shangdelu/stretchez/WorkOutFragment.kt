@@ -7,8 +7,9 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Button
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
@@ -23,10 +24,10 @@ private const val ARG_PLAN_ID = "plan_id"
 class WorkOutFragment : Fragment() {
 
     private var cdTimerText: TextView? = null
+    private lateinit var webView: WebView
     private lateinit var videoView: VideoView
     private lateinit var repeatButton: Button
     private lateinit var returnButton: Button
-    private lateinit var finishLayout: LinearLayout
     private lateinit var workOutRepository: StretchPlanRepository
     private var stretchPlanID: UUID? = null
     private lateinit var exercises: List<StretchExercise>
@@ -88,8 +89,24 @@ class WorkOutFragment : Fragment() {
             mp.isLooping = true
         }
 
+        webView = view.findViewById(R.id.webVideo) as WebView
+        val youtubeURL = "https://www.youtube.com/watch?v=aZ1PzhThqcU"
+        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
+                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
+                "</iframe></body></html>"
+        val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
+        if (youtubeURL.matches(regexYoutube.toRegex())) {
+            //if JavaScript usage is not required, delete this line.
+            webView.settings.javaScriptEnabled = true
+            webView.settings.domStorageEnabled = true
+            webView.loadData(frameVideo, "text/html", "utf-8")
+
+        }
+
+
+
         //Start playing the exercise video
-        videoView.start()
+        //videoView.start()
 
         repeatButton = view.findViewById(R.id.repeat_button) as Button
         returnButton = view.findViewById(R.id.return_button) as Button
