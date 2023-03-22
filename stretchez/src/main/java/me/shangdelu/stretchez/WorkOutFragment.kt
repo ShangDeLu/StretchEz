@@ -7,6 +7,7 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
@@ -90,12 +91,29 @@ class WorkOutFragment : Fragment() {
         }
 
         webView = view.findViewById(R.id.webVideo) as WebView
-        val youtubeURL = "https://www.youtube.com/watch?v=aZ1PzhThqcU"
+        val youtubeURL = "https://www.youtube.com/embed/aZ1PzhThqcU"
         val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
                 "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
                 "</iframe></body></html>"
         val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
         if (youtubeURL.matches(regexYoutube.toRegex())) {
+            //setting web client
+//            webView.webViewClient = object : WebViewClient() {
+//                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+//                    return false
+//                }
+//            }
+
+            //setting web client with non-deprecated function
+            webView.webViewClient = object: WebViewClient() {
+                override fun shouldOverrideUrlLoading(
+                    view: WebView?,
+                    request: WebResourceRequest?
+                ): Boolean {
+                    return false
+                }
+            }
+
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true
             webView.settings.domStorageEnabled = true
@@ -103,6 +121,10 @@ class WorkOutFragment : Fragment() {
 
         }
 
+        //TODO 1: Improve the UI of fragment_work_out with newly added WebView
+        //TODO 2: Start the countdown timer only when the WebView is playing the Video.
+        //TODO 3: Pause the countdown timer when the Video is paused.
+        //TODO 4: Read the Video URL from the stretchExerciseLink.
 
 
         //Start playing the exercise video
@@ -231,9 +253,6 @@ class WorkOutFragment : Fragment() {
         //start a new timer with the time remaining
         timerStart(timeRemain)
     }
-
-    //TODO 1: Make Improvement on App's UI
-    //TODO 2: Make fragment_work_out looks cleaner
 
 
     companion object {
