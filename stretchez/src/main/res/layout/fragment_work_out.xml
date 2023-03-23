@@ -33,7 +33,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cdTimer"
-        app:layout_constraintBottom_toTopOf="@id/repeat_button"/>
+        app:layout_constraintBottom_toTopOf="@id/repeat_button" />
+
 
     <WebView
         android:id="@+id/webVideo"
@@ -44,7 +45,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cdTimer"
         app:layout_constraintBottom_toTopOf="@id/repeat_button" />
-
 
     <TextView
         android:id="@+id/interval_textView"
@@ -74,8 +74,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/return_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cdTimer"
-        app:layout_constraintVertical_bias="0.643"
+        app:layout_constraintTop_toBottomOf="@+id/workOutVideo"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintBaseline_toBaselineOf="@+id/return_button"/>
 
     <Button
@@ -89,8 +89,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/repeat_button"
-        app:layout_constraintTop_toBottomOf="@+id/cdTimer"
-        app:layout_constraintVertical_bias="0.643" />
+        app:layout_constraintTop_toBottomOf="@+id/workOutVideo"
+        app:layout_constraintVertical_bias="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

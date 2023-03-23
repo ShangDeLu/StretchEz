@@ -125,6 +125,7 @@ class WorkOutFragment : Fragment() {
         //TODO 2: Start the countdown timer only when the WebView is playing the Video.
         //TODO 3: Pause the countdown timer when the Video is paused.
         //TODO 4: Read the Video URL from the stretchExerciseLink.
+        //TODO 5: Find out why there are blank space on top of the cdTimer.
 
 
         //Start playing the exercise video
@@ -171,6 +172,9 @@ class WorkOutFragment : Fragment() {
 
 
     private fun intervalStart(timeLengthMilli: Long) {
+        //Hide webView
+        webView.visibility = View.INVISIBLE
+
         //Hide videoView
         videoView.visibility = View.INVISIBLE
         //Show the intervalTextView
@@ -194,6 +198,9 @@ class WorkOutFragment : Fragment() {
                 intervalTextView?.visibility = View.GONE
                 //Show videoView
                 videoView.visibility = View.VISIBLE
+
+                //Show webView
+                webView.visibility = View.VISIBLE
 
                 //reset the countDownTimer and start it
                 timerStart(next.exerciseDuration.toLong() * 1000)
