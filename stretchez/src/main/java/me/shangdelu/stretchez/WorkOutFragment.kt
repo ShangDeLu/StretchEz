@@ -1,5 +1,6 @@
 package me.shangdelu.stretchez
 
+import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -7,10 +8,12 @@ import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.VideoView
 import androidx.fragment.app.Fragment
@@ -53,6 +56,13 @@ class WorkOutFragment : Fragment() {
         ViewModelProvider(this)[WorkOutFragmentViewModel::class.java]
     }
 
+    class JSBridge()  {
+        @JavascriptInterface
+        fun showMessageInNative(message: String) {
+
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         workOutRepository = StretchPlanRepository.get()
@@ -91,19 +101,19 @@ class WorkOutFragment : Fragment() {
         }
 
         //set the link of first exercise in exercises for webView
-        val exerciseLink = exercises[currentExercise].exerciseLink
+        //val exerciseLink = exercises[currentExercise].exerciseLink
         //set webView
         webView = view.findViewById(R.id.webVideo) as WebView
         val youtubeURL = "https://www.youtube.com/embed/aZ1PzhThqcU"
 
         //use exerciseLink to form the iframe link
-        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
-                "src='" + exerciseLink + "' frameborder=\"0\" allowfullscreen>" +
-                "</iframe></body></html>"
-
 //        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
-//                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
+//                "src='" + exerciseLink + "' frameborder=\"0\" allowfullscreen>" +
 //                "</iframe></body></html>"
+
+        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
+                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
+                "</iframe></body></html>"
 
         val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
 
@@ -131,6 +141,7 @@ class WorkOutFragment : Fragment() {
         //TODO 3: Pause the countdown timer when the Video is paused.
         //TODO 4: Read the Video URL from the stretchExerciseLink.
         //TODO 5: Find out why there are blank space on top of the cdTimer.
+        //TODO 6: Learn about Android webView native app communications and JSBridge.
 
 
         //Start playing the exercise video
