@@ -90,20 +90,25 @@ class WorkOutFragment : Fragment() {
             mp.isLooping = true
         }
 
+        //set the link of first exercise in exercises for webView
+        val exerciseLink = exercises[currentExercise].exerciseLink
+        //set webView
         webView = view.findViewById(R.id.webVideo) as WebView
         val youtubeURL = "https://www.youtube.com/embed/aZ1PzhThqcU"
-        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
-                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
-                "</iframe></body></html>"
-        val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
-        if (youtubeURL.matches(regexYoutube.toRegex())) {
-            //setting web client
-//            webView.webViewClient = object : WebViewClient() {
-//                override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
-//                    return false
-//                }
-//            }
 
+        //use exerciseLink to form the iframe link
+        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
+                "src='" + exerciseLink + "' frameborder=\"0\" allowfullscreen>" +
+                "</iframe></body></html>"
+
+//        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
+//                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
+//                "</iframe></body></html>"
+
+        val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
+
+        //check if the link matches the regex
+        if (youtubeURL.matches(regexYoutube.toRegex())) {
             //setting web client with non-deprecated function
             webView.webViewClient = object: WebViewClient() {
                 override fun shouldOverrideUrlLoading(
