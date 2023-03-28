@@ -59,6 +59,7 @@ class WorkOutFragment : Fragment() {
     class JSBridge()  {
         @JavascriptInterface
         fun showMessageInNative(message: String) {
+            //Received message from webView in native, process data.
 
         }
     }
@@ -128,6 +129,9 @@ class WorkOutFragment : Fragment() {
                     return false
                 }
             }
+
+            //set JavaScript Interface
+            webView.addJavascriptInterface(JSBridge(), "JSBridge")
 
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true
