@@ -56,6 +56,8 @@ class WorkOutFragment : Fragment() {
         ViewModelProvider(this)[WorkOutFragmentViewModel::class.java]
     }
 
+
+    //Receive message from webView and pass on to native
     class JSBridge()  {
         @JavascriptInterface
         fun showMessageInNative(message: String) {
@@ -63,6 +65,14 @@ class WorkOutFragment : Fragment() {
 
         }
     }
+
+    //Send data to webView through function updateFromNative
+    private fun sendDataToWebView() {
+        
+        //webView.evaluateJavascript()
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
