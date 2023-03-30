@@ -62,13 +62,15 @@ class WorkOutFragment : Fragment() {
         @JavascriptInterface
         fun showMessageInNative(message: String) {
             //Received message from webView in native, process data.
+            //TODO 1: Receive the player state from Youtube JavaScript API
+            //TODO 2: Adjust the cdTimer's state based on the state of the player
 
         }
     }
 
     //Send data to webView through function updateFromNative
     private fun sendDataToWebView() {
-        
+
         //webView.evaluateJavascript()
     }
 
