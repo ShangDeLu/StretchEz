@@ -124,9 +124,27 @@ class WorkOutFragment : Fragment() {
 //                "src='" + exerciseLink + "' frameborder=\"0\" allowfullscreen>" +
 //                "</iframe></body></html>"
 
+        //use demo youtubeURL to form the iframe link
         val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
                 "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
                 "</iframe></body></html>"
+
+        //use youtube iframe API
+        fun loadYoutubeVideoInWebView(videoID: String) {
+            val frameVideo = "<html><body style='margin:0px;padding:0px;'>\n" +
+                    "        <script type='text/javascript' src='http://www.youtube.com/iframe_api'></script><script type='text/javascript'>\n" +
+                    "                var player;\n" +
+                    "        function onYouTubeIframeAPIReady()\n" +
+                    "        {player=new YT.Player('playerId',{events:{onReady:onPlayerReady}})}\n" +
+                    "        function onPlayerReady(event){player.playVideo();}\n" +
+                    "        </script>\n" +
+                    "        <iframe id='playerId' type='text/html' width='400' height='360'\n" +
+                    "        src='https://www.youtube.com/embed/"+videoID+"?enablejsapi=1&autoplay=1' frameborder='0'>\n" +
+                    "        </body></html>"
+            webView.loadDataWithBaseURL("http://www.youtube.com", frameVideo, "text/html", "utf-8", null)
+        }
+
+
 
         val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
 
