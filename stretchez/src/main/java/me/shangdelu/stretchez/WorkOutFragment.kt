@@ -125,9 +125,9 @@ class WorkOutFragment : Fragment() {
 //                "</iframe></body></html>"
 
         //use demo youtubeURL to form the iframe link
-        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
-                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
-                "</iframe></body></html>"
+//        val frameVideo = "<html><body>Video From YouTube<br><iframe width=\"420\" height=\"315\" " +
+//                "src='" + youtubeURL + "' frameborder=\"0\" allowfullscreen>" +
+//                "</iframe></body></html>"
 
         //use youtube iframe API
         fun loadYoutubeVideoInWebView(videoID: String) {
@@ -145,6 +145,7 @@ class WorkOutFragment : Fragment() {
         }
 
 
+        val videoID = "aZ1PzhThqcU"
 
         val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
 
@@ -166,7 +167,10 @@ class WorkOutFragment : Fragment() {
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true
             webView.settings.domStorageEnabled = true
-            webView.loadData(frameVideo, "text/html", "utf-8")
+//            webView.loadData(frameVideo, "text/html", "utf-8")
+
+            loadYoutubeVideoInWebView(videoID)
+
 
         }
 
