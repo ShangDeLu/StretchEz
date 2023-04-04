@@ -50,6 +50,14 @@
       }
 
       //TODO: Add player.playVideo(), player.pauseVideo(), and player.stopVideo().
+      function onPlayerStateChange(event) {
+          if (event.data == 0) {
+           //video is currently paused
+           alert('done');
+           }
+      }
+
+
     </script>
   </body>
 </html>
