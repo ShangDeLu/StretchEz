@@ -49,13 +49,21 @@
         player.stopVideo();
       }
 
-      //TODO: Add player.playVideo(), player.pauseVideo(), and player.stopVideo().
+
       function onPlayerStateChange(event) {
           if (event.data == 0) {
            //video is currently paused
-           alert('done');
+           alert('pause');
+           //TODO: cdTimer should be paused as well
            }
+          if (event.data == 1) {
+          //video is currently playing
+          alert('resume');
+          //TODO: cdTimer should be resumed as well
       }
+
+       //TODO: Add player.playVideo(), player.pauseVideo(), and player.stopVideo().
+
 
 
     </script>
