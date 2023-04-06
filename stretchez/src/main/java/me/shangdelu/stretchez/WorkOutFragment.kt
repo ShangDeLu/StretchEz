@@ -64,6 +64,12 @@ class WorkOutFragment : Fragment() {
             //Received message from webView in native, process data.
             //TODO 1: Receive the player state from Youtube JavaScript API
             //TODO 2: Adjust the cdTimer's state based on the state of the player
+            if (message == "pause") {
+                //pause the cdTimer
+            }
+            if (message == "resume") {
+                //resume the cdTimer
+            }
 
         }
     }
