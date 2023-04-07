@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -58,21 +59,14 @@ class WorkOutFragment : Fragment() {
 
 
     //Receive message from webView and pass on to native
-    class JSBridge()  {
+    class JSBridge(val context: Context)  {
         @JavascriptInterface
-        fun showMessageInNative(message: String) {
+        fun showMessageInNative(message: String): String {
             //Received message from webView in native, process data.
-            //TODO 1: Receive the player state from Youtube JavaScript API
-            //TODO 2: Adjust the cdTimer's state based on the state of the player
-            if (message == "pause") {
-                //pause the cdTimer
-            }
-            if (message == "resume") {
-                //resume the cdTimer
-            }
-
+            return message
         }
     }
+
 
     //Send data to webView through function updateFromNative
     private fun sendDataToWebView() {
@@ -136,19 +130,23 @@ class WorkOutFragment : Fragment() {
 //                "</iframe></body></html>"
 
         //use youtube iframe API
-        fun loadYoutubeVideoInWebView(videoID: String) {
-            val frameVideo = "<html><body style='margin:0px;padding:0px;'>\n" +
-                    "        <script type='text/javascript' src='http://www.youtube.com/iframe_api'></script><script type='text/javascript'>\n" +
-                    "                var player;\n" +
-                    "        function onYouTubeIframeAPIReady()\n" +
-                    "        {player=new YT.Player('playerId',{events:{onReady:onPlayerReady}})}\n" +
-                    "        function onPlayerReady(event){player.playVideo();}\n" +
-                    "        </script>\n" +
-                    "        <iframe id='playerId' type='text/html' width='400' height='360'\n" +
-                    "        src='https://www.youtube.com/embed/"+videoID+"?enablejsapi=1&autoplay=1' frameborder='0'>\n" +
-                    "        </body></html>"
-            webView.loadDataWithBaseURL("http://www.youtube.com", frameVideo, "text/html", "utf-8", null)
-        }
+//        fun loadYoutubeVideoInWebView(videoID: String) {
+//            val frameVideo = "<html><body style='margin:0px;padding:0px;'>\n" +
+//                    "        <script type='text/javascript' src='http://www.youtube.com/iframe_api'></script><script type='text/javascript'>\n" +
+//                    "                var player;\n" +
+//                    "        function onYouTubeIframeAPIReady()\n" +
+//                    "        {player=new YT.Player('playerId',{events:{onReady:onPlayerReady}})}\n" +
+//                    "        function onPlayerReady(event){player.playVideo();}\n" +
+//                    "        </script>\n" +
+//                    "        <iframe id='playerId' type='text/html' width='400' height='360'\n" +
+//                    "        src='https://www.youtube.com/embed/"+videoID+"?enablejsapi=1&autoplay=1' frameborder='0'>\n" +
+//                    "        </body></html>"
+//            webView.loadDataWithBaseURL("http://www.youtube.com", frameVideo, "text/html", "utf-8", null)
+//        }
+
+        webView.loadUrl("file:///android_res/raw/youtubeiframeapi.html")
+
+
 
 
         val videoID = "aZ1PzhThqcU"
@@ -168,14 +166,16 @@ class WorkOutFragment : Fragment() {
             }
 
             //set JavaScript Interface
-            webView.addJavascriptInterface(JSBridge(), "JSBridge")
+            webView.addJavascriptInterface(JSBridge(this.requireContext()), "JSBridge")
 
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true
             webView.settings.domStorageEnabled = true
+            webView.settings.allowFileAccess = true
+
 //            webView.loadData(frameVideo, "text/html", "utf-8")
 
-            loadYoutubeVideoInWebView(videoID)
+            //loadYoutubeVideoInWebView(videoID)
 
 
         }
