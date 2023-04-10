@@ -180,12 +180,10 @@ class WorkOutFragment : Fragment() {
 
         }
 
-        //TODO 1: Improve the UI of fragment_work_out with newly added WebView
-        //TODO 2: Start the countdown timer only when the WebView is playing the Video.
-        //TODO 3: Pause the countdown timer when the Video is paused.
-        //TODO 4: Read the Video URL from the stretchExerciseLink.
-        //TODO 5: Find out why there are blank space on top of the cdTimer.
-        //TODO 6: Learn about Android webView native app communications and JSBridge.
+        //TODO 1: Start the countdown timer only when the WebView is playing the Video.
+        //TODO 2: Pause the countdown timer when the Video is paused.
+        //TODO 3: Read the Video URL from the stretchExerciseLink.
+        //TODO 4: Find out why there are blank space on top of the cdTimer.
 
 
         //Start playing the exercise video

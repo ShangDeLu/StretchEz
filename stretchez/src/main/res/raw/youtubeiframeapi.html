@@ -49,6 +49,8 @@
         }
         if (event.data == YT.PlayerState.ENDED) {
           alert('done');
+          //when current video finish playing, repeat playing the video.
+          player.playVideo();
         }
           
       }
