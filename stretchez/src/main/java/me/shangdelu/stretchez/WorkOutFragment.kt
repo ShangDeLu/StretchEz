@@ -13,10 +13,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.VideoView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -61,9 +58,9 @@ class WorkOutFragment : Fragment() {
     //Receive message from webView and pass on to native
     class JSBridge(val context: Context)  {
         @JavascriptInterface
-        fun showMessageInNative(message: String): String {
+        fun showMessageInNative(message: String) {
             //Received message from webView in native, process data.
-            return message
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
         }
     }
 

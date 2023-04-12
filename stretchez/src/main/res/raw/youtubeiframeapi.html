@@ -3,6 +3,8 @@
   <body>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
+    //TODO: Find a way to pass the value from Kotlin File instead of hard code it in JavaScript
+    <input type="button" value="Say hello" onClick="showMessage('Hello Android!')" />
 
     <script>
       // 2. This code loads the IFrame Player API code asynchronously.
@@ -58,7 +60,8 @@
         player.stopVideo();
       }
 
-      function getVideoId() {
+      //Test: call the methods in Kotlin file from JavaScript file.
+      function showMessage(message) {
         JSBridge.showMessageInNative(message);
       }
 
