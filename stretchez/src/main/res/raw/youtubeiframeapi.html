@@ -3,8 +3,6 @@
   <body>
     <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
     <div id="player"></div>
-    //TODO: Find a way to pass the value from Kotlin File instead of hard code it in JavaScript
-    <input type="button" value="Say hello" onClick="showMessage('Hello Android!')" />
 
     <script>
       // 2. This code loads the IFrame Player API code asynchronously.
@@ -19,8 +17,8 @@
       var player;
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-          height: '390',
-          width: '640',
+          height: '315',
+          width: '420',
           videoId: 'aZ1PzhThqcU',
           playerVars: {
             'autoplay': 1,
@@ -45,6 +43,7 @@
       function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
           alert('playing');
+          showMessage("showVideoID");
         }
         if (event.data == YT.PlayerState.PAUSED) {
           alert('pause');

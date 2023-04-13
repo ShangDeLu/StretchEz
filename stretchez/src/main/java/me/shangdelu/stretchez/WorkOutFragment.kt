@@ -56,11 +56,12 @@ class WorkOutFragment : Fragment() {
 
 
     //Receive message from webView and pass on to native
-    class JSBridge(val context: Context)  {
+    class JSBridge(val context: Context, private val videoID: String)  {
         @JavascriptInterface
-        fun showMessageInNative(message: String) {
-            //Received message from webView in native, process data.
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        fun showMessageInNative(message: String): String {
+            //Received videoID from webView in native and pass it to JavaScript file.
+            Toast.makeText(context, videoID, Toast.LENGTH_LONG).show()
+            return videoID
         }
     }
 
@@ -117,6 +118,7 @@ class WorkOutFragment : Fragment() {
 
         val youtubeURL = "https://www.youtube.com/embed/aZ1PzhThqcU"
 
+        val videoID = "aZ1PzhThqcU"
 
 
         webView.loadUrl("file:///android_res/raw/youtubeiframeapi.html")
@@ -137,8 +139,8 @@ class WorkOutFragment : Fragment() {
                 }
             }
 
-            //set JavaScript Interface
-            webView.addJavascriptInterface(JSBridge(this.requireContext()), "JSBridge")
+            //set JavaScript Interface with videoID
+            webView.addJavascriptInterface(JSBridge(this.requireContext(), videoID), "JSBridge")
 
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true
