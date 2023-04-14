@@ -58,20 +58,11 @@ class WorkOutFragment : Fragment() {
     //Receive message from webView and pass on to native
     class JSBridge(val context: Context, private val videoID: String)  {
         @JavascriptInterface
-        fun showMessageInNative(message: String): String {
+        fun showMessageInNative(): String {
             //Received videoID from webView in native and pass it to JavaScript file.
-            Toast.makeText(context, videoID, Toast.LENGTH_LONG).show()
             return videoID
         }
     }
-
-
-    //Send data to webView through function updateFromNative
-    private fun sendDataToWebView() {
-
-        //webView.evaluateJavascript()
-    }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

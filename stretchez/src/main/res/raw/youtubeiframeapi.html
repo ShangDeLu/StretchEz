@@ -19,7 +19,7 @@
         player = new YT.Player('player', {
           height: '315',
           width: '420',
-          videoId: 'aZ1PzhThqcU',
+          videoId: showMessage(),
           playerVars: {
             'autoplay': 1,
             'playsinline': 1
@@ -43,7 +43,7 @@
       function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
           alert('playing');
-          showMessage("showVideoID");
+          showMessage();
         }
         if (event.data == YT.PlayerState.PAUSED) {
           alert('pause');
@@ -59,9 +59,13 @@
         player.stopVideo();
       }
 
-      //Test: call the methods in Kotlin file from JavaScript file.
-      function showMessage(message) {
-        JSBridge.showMessageInNative(message);
+      //Call the methods in Kotlin file from JavaScript file.
+      //Receive the videoID from Kotlin file and convert it to single quotation mark.
+      //Return the videoID with single quotation mark.
+      function showMessage() {
+        var videoID = JSBridge.showMessageInNative();
+        singleVideoID = videoID.replace(/"/g, "'");
+        return singleVideoID;
       }
 
     </script>
