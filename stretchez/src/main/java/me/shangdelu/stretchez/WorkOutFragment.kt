@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +64,12 @@ class WorkOutFragment : Fragment() {
             return videoID
         }
     }
+
+    private fun sendDataToWebView() {
+        val res = webView.evaluateJavascript("onPlayerStateChange", null)
+        println(res.toString())
+    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +139,9 @@ class WorkOutFragment : Fragment() {
 
             //set JavaScript Interface with videoID
             webView.addJavascriptInterface(JSBridge(this.requireContext(), videoID), "JSBridge")
+
+            //receive data from webView
+            sendDataToWebView()
 
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true

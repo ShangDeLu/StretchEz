@@ -43,10 +43,15 @@
       function onPlayerStateChange(event) {
         if (event.data == YT.PlayerState.PLAYING) {
           alert('playing');
-          showMessage();
+          //Tell Kotlin File video is currently playing.
+          videoPlaying();
+
         }
         if (event.data == YT.PlayerState.PAUSED) {
           alert('pause');
+          //Tell Kotlin File video is currently paused.
+          videoPaused();
+
         }
         if (event.data == YT.PlayerState.ENDED) {
           alert('done');
@@ -66,6 +71,14 @@
         var videoID = JSBridge.showMessageInNative();
         singleVideoID = videoID.replace(/"/g, "'");
         return singleVideoID;
+      }
+
+      function videoPlaying() {
+        return "videoPlaying";
+      }
+
+      function videoPaused() {
+        return "videoPaused";
       }
 
     </script>
