@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
+import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
@@ -23,6 +24,13 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 private const val ARG_PLAN_ID = "plan_id"
+
+interface CountDownTimerCallBacks {
+    //Called when the state of cdTimer need to be changed
+    fun timerPause()
+
+    fun timerResume()
+}
 
 class WorkOutFragment : Fragment() {
 
@@ -63,13 +71,17 @@ class WorkOutFragment : Fragment() {
             //Received videoID from webView in native and pass it to JavaScript file.
             return videoID
         }
-    }
 
-    private fun sendDataToWebView() {
-        val res = webView.evaluateJavascript("onPlayerStateChange", null)
-        println(res.toString())
-    }
+        @JavascriptInterface
+        fun getDataFromJS(videoLifeCycle: String) {
+            println(videoLifeCycle)
+            //TODO: Use an if else on videoLifeCycle to control cdTimer.
+            //TODO 2: Create an interface with cdTimer functions, then let JSBridge use this interface.
+            if (videoLifeCycle == "Paused") {
 
+            }
+        }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,8 +152,6 @@ class WorkOutFragment : Fragment() {
             //set JavaScript Interface with videoID
             webView.addJavascriptInterface(JSBridge(this.requireContext(), videoID), "JSBridge")
 
-            //receive data from webView
-            sendDataToWebView()
 
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true

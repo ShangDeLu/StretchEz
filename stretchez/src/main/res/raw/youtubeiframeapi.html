@@ -44,13 +44,13 @@
         if (event.data == YT.PlayerState.PLAYING) {
           alert('playing');
           //Tell Kotlin File video is currently playing.
-          videoPlaying();
+          JSBridge.getDataFromJS("Playing");
 
         }
         if (event.data == YT.PlayerState.PAUSED) {
           alert('pause');
           //Tell Kotlin File video is currently paused.
-          videoPaused();
+          JSBridge.getDataFromJS("Paused");
 
         }
         if (event.data == YT.PlayerState.ENDED) {
@@ -71,14 +71,6 @@
         var videoID = JSBridge.showMessageInNative();
         singleVideoID = videoID.replace(/"/g, "'");
         return singleVideoID;
-      }
-
-      function videoPlaying() {
-        return "videoPlaying";
-      }
-
-      function videoPaused() {
-        return "videoPaused";
       }
 
     </script>
