@@ -66,6 +66,12 @@ class WorkOutFragment : Fragment() {
 
     //Receive message from webView and pass on to native
     class JSBridge(val context: Context, private val videoID: String)  {
+        
+        //override functions for the cdTimer
+//        override fun timerPause() {
+//
+//        }
+
         @JavascriptInterface
         fun showMessageInNative(): String {
             //Received videoID from webView in native and pass it to JavaScript file.
@@ -78,7 +84,10 @@ class WorkOutFragment : Fragment() {
             //TODO: Use an if else on videoLifeCycle to control cdTimer.
             //TODO 2: Create an interface with cdTimer functions, then let JSBridge use this interface.
             if (videoLifeCycle == "Paused") {
-
+                //Stop the cdTimer
+            }
+            if (videoLifeCycle == "Playing") {
+                //Resume the cdTimer
             }
         }
     }
