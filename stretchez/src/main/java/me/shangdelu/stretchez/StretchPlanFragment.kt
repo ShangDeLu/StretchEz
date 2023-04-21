@@ -80,12 +80,6 @@ class StretchPlanFragment : Fragment() {
         }
 
 
-        //TODO 1: ask about autofill hints for EditText.
-        //TODO 2: consider about whether to use MediaController or not.
-        //TODO 3: make sure the VideoView is fixed size, and video resize to fit the VideoView.
-        //TODO 4: learn about WebView, and for the first step, use WebView to play a youtube video.
-
-
         if (argumentOption == 1) { //when creating new plan
             //hide stretchPlanStartButton and selectActionButton
             stretchPlanStartButton.visibility = View.GONE

@@ -5,17 +5,16 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.JavascriptInterface
-import android.webkit.ValueCallback
-import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.*
+import android.widget.Button
+import android.widget.TextView
+import android.widget.VideoView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -32,7 +31,7 @@ interface CountDownTimerCallBacks {
     fun timerResume()
 }
 
-class WorkOutFragment : Fragment() {
+class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
     private var cdTimerText: TextView? = null
     private lateinit var webView: WebView
@@ -69,11 +68,11 @@ class WorkOutFragment : Fragment() {
 
         //override functions for the cdTimer
         override fun timerPause() {
-            TODO("Not yet implemented")
+            
         }
 
         override fun timerResume() {
-            TODO("Not yet implemented")
+
         }
 
 
@@ -90,11 +89,11 @@ class WorkOutFragment : Fragment() {
             //TODO 2: Create an interface with cdTimer functions, then let JSBridge use this interface.
             if (videoLifeCycle == "Paused") {
                 //Stop the cdTimer
-                //timerPause()
+                timerPause()
             }
             if (videoLifeCycle == "Playing") {
                 //Resume the cdTimer
-                //timerResume()
+                timerResume()
             }
         }
     }
@@ -107,6 +106,7 @@ class WorkOutFragment : Fragment() {
         stretchPlanID = arguments?.getSerializable(ARG_PLAN_ID) as UUID?
         //Retrieve interval from the fragment arguments
         interval = arguments?.getInt("Interval") ?: 0
+
     }
 
     override fun onCreateView(
@@ -306,11 +306,12 @@ class WorkOutFragment : Fragment() {
         timer.start()
     }
 
-    private fun timerPause() {
+
+    override fun timerPause() {
         timer.cancel()
     }
 
-    private fun timerResume() {
+    override fun timerResume() {
         //start a new timer with the time remaining
         timerStart(timeRemain)
     }
