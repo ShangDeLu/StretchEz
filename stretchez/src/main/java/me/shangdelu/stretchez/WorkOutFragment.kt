@@ -64,17 +64,13 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
 
     //Receive message from webView and pass on to native
-    class JSBridge(val context: Context, private val videoID: String): CountDownTimerCallBacks {
+    class JSBridge(val context: Context, private val videoID: String) {
 
-        //override functions for the cdTimer
-        override fun timerPause() {
-            
+        private var cdTimerCallbacks: CountDownTimerCallBacks? = null
+
+        fun setCallbackInterface(cdTimerCallbacks: CountDownTimerCallBacks) {
+            this.cdTimerCallbacks = cdTimerCallbacks
         }
-
-        override fun timerResume() {
-
-        }
-
 
         @JavascriptInterface
         fun showMessageInNative(): String {
@@ -85,15 +81,20 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         @JavascriptInterface
         fun getDataFromJS(videoLifeCycle: String) {
             println(videoLifeCycle)
-            //TODO: Use an if else on videoLifeCycle to control cdTimer.
-            //TODO 2: Create an interface with cdTimer functions, then let JSBridge use this interface.
+
             if (videoLifeCycle == "Paused") {
                 //Stop the cdTimer
-                timerPause()
+                //timerPause()
+
+                //trigger the callback
+                cdTimerCallbacks?.timerPause()
             }
             if (videoLifeCycle == "Playing") {
                 //Resume the cdTimer
-                timerResume()
+                //timerResume()
+
+                //trigger the callback
+                cdTimerCallbacks?.timerResume()
             }
         }
     }
@@ -165,9 +166,13 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                 }
             }
 
-            //set JavaScript Interface with videoID
-            webView.addJavascriptInterface(JSBridge(this.requireContext(), videoID), "JSBridge")
+            //create the object of JSBridge class
+            val jsBridge = JSBridge(this.requireContext(), videoID)
+            //initialize the interface setter
+            jsBridge.setCallbackInterface(this)
 
+            //set JavaScript Interface with videoID
+            webView.addJavascriptInterface(jsBridge, "JSBridge")
 
             //if JavaScript usage is not required, delete this line.
             webView.settings.javaScriptEnabled = true
