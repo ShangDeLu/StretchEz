@@ -313,12 +313,14 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
 
     override fun timerPause() {
-        timer.cancel()
+        println("callbackPause")
+        //timer.cancel()
     }
 
     override fun timerResume() {
+        println("callbackResume")
         //start a new timer with the time remaining
-        timerStart(timeRemain)
+        //timerStart(timeRemain)
     }
 
 
