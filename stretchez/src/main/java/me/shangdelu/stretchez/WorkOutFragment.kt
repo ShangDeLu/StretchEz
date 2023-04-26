@@ -182,9 +182,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         }
 
         //TODO 1: Start the countdown timer only when the WebView is playing the Video.
-        //TODO 2: Pause the countdown timer when the Video is paused.
-        //TODO 3: Read the Video URL from the stretchExerciseLink.
-        //TODO 4: Find out why there are blank space on top of the cdTimer.
+        //TODO 2: Read the Video URL from the stretchExerciseLink.
+        //TODO 3: Find out why there are blank space on top of the cdTimer.
 
 
         //Start playing the exercise video
@@ -313,14 +312,21 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
 
     override fun timerPause() {
-        println("callbackPause")
-        //timer.cancel()
+        //Test if timerPause is called when pausing the video
+        //println("callbackPause")
+
+        //stop the current timer
+        timer.cancel()
     }
 
     override fun timerResume() {
-        println("callbackResume")
+        //Test if timerResume is called when resuming the video
+        //println("callbackResume")
+
+        //TODO: Either find a way to autoplay the video, or distinguish between resume and start.
+
         //start a new timer with the time remaining
-        //timerStart(timeRemain)
+        timerStart(timeRemain)
     }
 
 
