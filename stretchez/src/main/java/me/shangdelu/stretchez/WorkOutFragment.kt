@@ -49,6 +49,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     private lateinit var mediaPlayer: MediaPlayer
     //boolean flag to determine the state of mediaPlayer
     private var playingFlag: Boolean = true
+    //boolean flag to determine if the video is resume from pausing or starting for the first time
+    private var youtubeVideoResume: Boolean = false
     //variable for timer to be accessed by other function
     private lateinit var timer: CountDownTimer
     //variable for remaining time on the timer
@@ -323,10 +325,18 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         //Test if timerResume is called when resuming the video
         //println("callbackResume")
 
-        //TODO: Either find a way to autoplay the video, or distinguish between resume and start.
+        if (!youtubeVideoResume) {
+            //youtubeVideoResume is false means the video is playing for the first time
+            //change the boolean flag to true as all calls after this will be video resuming
+            youtubeVideoResume = true
+            return
+        } else {
+            //TODO: Fatal Exception: Only the original thread that created a view hierarchy can touch its views.
 
-        //start a new timer with the time remaining
-        timerStart(timeRemain)
+            //youtubeVideoResume is true means the video is resuming from pausing state
+            //start a new timer with the time remaining
+            timerStart(timeRemain)
+        }
     }
 
 
