@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -284,6 +285,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                         TimeUnit.MILLISECONDS.toMinutes(milliTillFinish) % 60,
                         TimeUnit.MILLISECONDS.toSeconds(milliTillFinish) % 60
                     )
+                    println("$this: $timeRemain")
                     //record the remaining time
                     timeRemain = milliTillFinish
                 }
@@ -316,14 +318,15 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                     }
                 }
             }
+            timer.start()
+            println("new timer instance: $timer")
         }
-        timer.start()
     }
 
 
     override fun timerPause() {
         //Test if timerPause is called when pausing the video
-        //println("callbackPause")
+        println("callbackPause$timer")
 
         //stop the current timer
         timer.cancel()
@@ -331,7 +334,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
     override fun timerResume() {
         //Test if timerResume is called when resuming the video
-        //println("callbackResume")
+        println("callbackResume")
 
         if (!youtubeVideoResume) {
             //youtubeVideoResume is false means the video is playing for the first time
