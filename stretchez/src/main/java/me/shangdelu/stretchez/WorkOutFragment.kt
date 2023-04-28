@@ -271,40 +271,48 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         intervalTimer.start()
     }
     private fun timerStart(timeLengthMilli: Long) {
-        timer = object : CountDownTimer(timeLengthMilli, 1000) {
-            override fun onTick(milliTillFinish: Long) {
-                cdTimerText?.text = getString(
-                    R.string.formatted_time,
-                    TimeUnit.MILLISECONDS.toMinutes(milliTillFinish) % 60,
-                    TimeUnit.MILLISECONDS.toSeconds(milliTillFinish) % 60)
-                //record the remaining time
-                timeRemain = milliTillFinish
-            }
 
-            override fun onFinish() {
-                //if currentExercise is not the last exercise of the stretchPlan
-                if (!exerciseControl.endOfList(exercises)) {
-                    //stop and release the media player instance and move to idle state
-                    videoView.stopPlayback()
-                    //Start the interval countdown timer
-                    intervalStart(interval.toLong() * 1000)
-                } else {
-                    //currentExercise is the last exercise of the stretchPlan
-                    //will stop and release the media player instance and move to idle state
-                    videoView.stopPlayback()
-                    cdTimerText?.text = getString(R.string.complete_time)
-                    //enable the repeat and return button
-                    repeatButton.isEnabled = true
-                    returnButton.isEnabled = true
-                    //Button to repeat current exercise
-                    repeatButton.setOnClickListener {
-                        //Reset the timer instead of replace the fragment
-                        repeat()
-                    }
+        //Test if runOnUiThread works
+        activity?.runOnUiThread {
+            //TODO 2: Seems like two timers are running on one TextView?
+            //Also, the time on the timer is not right.
 
-                    //Button to return to home screen
-                    returnButton.setOnClickListener {
-                        findNavController().navigate(R.id.action_navigation_work_out_to_navigation_home)
+            timer = object : CountDownTimer(timeLengthMilli, 1000) {
+                override fun onTick(milliTillFinish: Long) {
+                    cdTimerText?.text = getString(
+                        R.string.formatted_time,
+                        TimeUnit.MILLISECONDS.toMinutes(milliTillFinish) % 60,
+                        TimeUnit.MILLISECONDS.toSeconds(milliTillFinish) % 60
+                    )
+                    //record the remaining time
+                    timeRemain = milliTillFinish
+                }
+
+                override fun onFinish() {
+                    //if currentExercise is not the last exercise of the stretchPlan
+                    if (!exerciseControl.endOfList(exercises)) {
+                        //stop and release the media player instance and move to idle state
+                        videoView.stopPlayback()
+                        //Start the interval countdown timer
+                        intervalStart(interval.toLong() * 1000)
+                    } else {
+                        //currentExercise is the last exercise of the stretchPlan
+                        //will stop and release the media player instance and move to idle state
+                        videoView.stopPlayback()
+                        cdTimerText?.text = getString(R.string.complete_time)
+                        //enable the repeat and return button
+                        repeatButton.isEnabled = true
+                        returnButton.isEnabled = true
+                        //Button to repeat current exercise
+                        repeatButton.setOnClickListener {
+                            //Reset the timer instead of replace the fragment
+                            repeat()
+                        }
+
+                        //Button to return to home screen
+                        returnButton.setOnClickListener {
+                            findNavController().navigate(R.id.action_navigation_work_out_to_navigation_home)
+                        }
                     }
                 }
             }
@@ -331,7 +339,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             youtubeVideoResume = true
             return
         } else {
-            //TODO: Fatal Exception: Only the original thread that created a view hierarchy can touch its views.
+            //TODO1: Fatal Exception: Only the original thread that created a view hierarchy can touch its views.
+            //Try runOnUiThread {}
 
             //youtubeVideoResume is true means the video is resuming from pausing state
             //start a new timer with the time remaining
