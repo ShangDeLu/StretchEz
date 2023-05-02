@@ -1,11 +1,9 @@
 package me.shangdelu.stretchez
 
-import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +20,8 @@ import androidx.navigation.fragment.findNavController
 import me.shangdelu.stretchez.database.StretchExercise
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 private const val ARG_PLAN_ID = "plan_id"
 
@@ -42,8 +42,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     private lateinit var workOutRepository: StretchPlanRepository
     private var stretchPlanID: UUID? = null
     private lateinit var exercises: List<StretchExercise>
-    //Index of current Exercise in list of stretchExercise
-    private var currentExercise = 0
+    //Duration of current Exercise in list of stretchExercise
+    private var currentExerciseDuration = 0
     //length of interval between exercises
     private var interval = 0
     //variable for MediaPlayer to implement pause and resume feature
@@ -59,6 +59,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     //initialize ExerciseControl
     private val exerciseControl = ExerciseControl()
     private var intervalTextView: TextView? = null
+    //jsBridge object that pass the videoID to youtube iFrame api
+    private lateinit var jsBridge: JSBridge
 
     //Associate the Fragment with the ViewModel
     private val workOutFragmentViewModel: WorkOutFragmentViewModel by lazy {
@@ -67,7 +69,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
 
     //Receive message from webView and pass on to native
-    class JSBridge(val context: Context, private val videoID: String) {
+    class JSBridge(private val videoID: String) {
 
         private var cdTimerCallbacks: CountDownTimerCallBacks? = null
 
@@ -83,20 +85,12 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
         @JavascriptInterface
         fun getDataFromJS(videoLifeCycle: String) {
-            println(videoLifeCycle)
-
             if (videoLifeCycle == "Paused") {
-                //Stop the cdTimer
-                //timerPause()
-
-                //trigger the callback
+                //trigger the callback to pause the timer
                 cdTimerCallbacks?.timerPause()
             }
             if (videoLifeCycle == "Playing") {
-                //Resume the cdTimer
-                //timerResume()
-
-                //trigger the callback
+                //trigger the callback to resume the timer
                 cdTimerCallbacks?.timerResume()
             }
         }
@@ -110,7 +104,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         stretchPlanID = arguments?.getSerializable(ARG_PLAN_ID) as UUID?
         //Retrieve interval from the fragment arguments
         interval = arguments?.getInt("Interval") ?: 0
-
     }
 
     override fun onCreateView(
@@ -121,12 +114,52 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
         //observe the LiveData
         workOutFragmentViewModel.getExercisesOfPlan(stretchPlanID).observe(viewLifecycleOwner) {
+            //set webView
+            webView = view.findViewById(R.id.webVideo) as WebView
+
             //retrieve the list of exercises of stretchPlanID from LiveData
             exercises = it
             //Get the first exercise of the plan
-            val current = firstExercise()
-            //Start the countdown timer
-            timerStart(current.exerciseDuration.toLong() * 1000)
+            val current = currentExercise()
+            //Get the duration of current exercise of the plan
+            currentExerciseDuration = current.exerciseDuration
+
+            //load the youtube iframe api
+            webView.loadUrl("file:///android_res/raw/youtubeiframeapi.html")
+
+            //set the link of first exercise in exercises for webView
+            val exerciseLink = currentExercise().exerciseLink
+
+            //call getYoutubeVideoID to get the videoID for current exercise
+            val currentVideoID = getYoutubeVideoID(exerciseLink)
+
+            //check if a videoID is successfully returned
+            if (currentVideoID != "") { //if currentVideoID is not an empty string, means a videoID has been returned.
+
+                //TODO: Ask if this part of code is actually meaningful, or can be deleted
+                //setting web client with non-deprecated function
+//                webView.webViewClient = object: WebViewClient() {
+//                    override fun shouldOverrideUrlLoading(
+//                        view: WebView?,
+//                        request: WebResourceRequest?
+//                    ): Boolean {
+//                        return false
+//                    }
+//                }
+
+                //create the object of JSBridge class
+                jsBridge = JSBridge(currentVideoID)
+                //initialize the interface setter
+                jsBridge.setCallbackInterface(this)
+
+                //set JavaScript Interface with videoID
+                webView.addJavascriptInterface(jsBridge, "JSBridge")
+
+                //if JavaScript usage is not required, delete this line.
+                webView.settings.javaScriptEnabled = true
+                webView.settings.domStorageEnabled = true
+                webView.settings.allowFileAccess = true
+            }
         }
 
         cdTimerText = view.findViewById(R.id.cdTimer) as TextView
@@ -141,53 +174,14 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             mp.isLooping = true
         }
 
-        //set the link of first exercise in exercises for webView
-        //val exerciseLink = exercises[currentExercise].exerciseLink
-        //set webView
-        webView = view.findViewById(R.id.webVideo) as WebView
-
-        val youtubeURL = "https://www.youtube.com/embed/aZ1PzhThqcU"
-
-        val videoID = "aZ1PzhThqcU"
+        //TODO 1: Rest the videoID that is used in youtube iframe api, so different videos can be played.
+        //TODO 2: Use ExerciseControl to alter the index in exercises, so the video is played in the right order.
+        //TODO 3: Add the duration feature, so the user can choose the duration for each exercise.
+        //TODO 4: Find out why there are blank space on top of the cdTimer.
 
 
-        webView.loadUrl("file:///android_res/raw/youtubeiframeapi.html")
-
-
-
-        val regexYoutube = "^(http(s)?:\\/\\/)?((w){3}.)?youtu(be|.be)?(\\.com)?\\/.+"
-
-        //check if the link matches the regex
-        if (youtubeURL.matches(regexYoutube.toRegex())) {
-            //setting web client with non-deprecated function
-            webView.webViewClient = object: WebViewClient() {
-                override fun shouldOverrideUrlLoading(
-                    view: WebView?,
-                    request: WebResourceRequest?
-                ): Boolean {
-                    return false
-                }
-            }
-
-            //create the object of JSBridge class
-            val jsBridge = JSBridge(this.requireContext(), videoID)
-            //initialize the interface setter
-            jsBridge.setCallbackInterface(this)
-
-            //set JavaScript Interface with videoID
-            webView.addJavascriptInterface(jsBridge, "JSBridge")
-
-            //if JavaScript usage is not required, delete this line.
-            webView.settings.javaScriptEnabled = true
-            webView.settings.domStorageEnabled = true
-            webView.settings.allowFileAccess = true
-
-        }
-
-        //TODO 1: Start the countdown timer only when the WebView is playing the Video.
-        //TODO 2: Read the Video URL from the stretchExerciseLink.
-        //TODO 3: Find out why there are blank space on top of the cdTimer.
-
+        //Start the countdown timer
+        //timerStart(current.exerciseDuration.toLong() * 1000)
 
         //Start playing the exercise video
         //videoView.start()
@@ -215,7 +209,22 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         return view
     }
 
-    private fun firstExercise(): StretchExercise {
+    private fun getYoutubeVideoID(videoUrl: String): String {
+        //Use pattern and matcher to get the youtube video ID from the URL link
+        val youtubePattern = "(?<=watch]]?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
+        val compiledPattern: Pattern = Pattern.compile(youtubePattern)
+        val matcher: Matcher = compiledPattern.matcher(videoUrl)
+
+        //check if the link matches the pattern
+        if (matcher.find()) {
+            //if the pattern is matched, return the videoID of the given url
+            return matcher.group()
+        }
+        //otherwise, return an empty string meaning that pattern is not matched
+        return ""
+    }
+
+    private fun currentExercise(): StretchExercise {
         return exerciseControl.getCurrent(exercises)
     }
 
@@ -263,21 +272,49 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                 //Show webView
                 webView.visibility = View.VISIBLE
 
-                //reset the countDownTimer and start it
-                timerStart(next.exerciseDuration.toLong() * 1000)
+                //reset the youtubeVideoResume flag to false, since new exercise is incoming
+                youtubeVideoResume = false
+                //set the exercise duration to that of the next exercise
+                currentExerciseDuration = next.exerciseDuration
+
+                //get the videoID for the next exercise coming up
+                val nextVideoID = getYoutubeVideoID(next.exerciseLink)
+
+                //TODO: Two solutions for playing a different video on the iframe api player
+                //1: Create a new iframe api player with nextVideoID passing to it
+                //2: Try the queue functions built in the iframe api
+
+                //check if a videoID is successfully returned
+                if (nextVideoID != "") { //if nextVideoID is not an empty string, means a videoID has been returned.
+                    //load the youtube iframe api
+                    webView.loadUrl("file:///android_res/raw/youtubeiframeapi.html")
+
+                    //pass the videoID to jsBridge
+                    jsBridge = JSBridge(nextVideoID)
+
+                    //set JavaScript Interface with videoID
+                    webView.addJavascriptInterface(jsBridge, "JSBridge")
+
+                    //if JavaScript usage is not required, delete this line.
+                    webView.settings.javaScriptEnabled = true
+                    webView.settings.domStorageEnabled = true
+                    webView.settings.allowFileAccess = true
+                }
+
+
+                //reset and start the countdownTimer (in the case if videoView is used)
+                //timerStart(next.exerciseDuration.toLong() * 1000)
+
                 //start playing the next exercise
-                videoView.start()
+                //videoView.start()
             }
         }
         intervalTimer.start()
     }
     private fun timerStart(timeLengthMilli: Long) {
 
-        //Test if runOnUiThread works
+        //Use runOnUiThread as only the original thread that created a view hierarchy can touch its views
         activity?.runOnUiThread {
-            //TODO 2: Seems like two timers are running on one TextView?
-            //Also, the time on the timer is not right.
-
             timer = object : CountDownTimer(timeLengthMilli, 1000) {
                 override fun onTick(milliTillFinish: Long) {
                     cdTimerText?.text = getString(
@@ -285,7 +322,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                         TimeUnit.MILLISECONDS.toMinutes(milliTillFinish) % 60,
                         TimeUnit.MILLISECONDS.toSeconds(milliTillFinish) % 60
                     )
-                    println("$this: $timeRemain")
                     //record the remaining time
                     timeRemain = milliTillFinish
                 }
@@ -318,33 +354,25 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                     }
                 }
             }
+            //timer.start() need to be included in the runOnUiThread{}, otherwise the old timer will be called instead
             timer.start()
-            println("new timer instance: $timer")
         }
     }
 
 
     override fun timerPause() {
-        //Test if timerPause is called when pausing the video
-        println("callbackPause$timer")
-
         //stop the current timer
         timer.cancel()
     }
 
     override fun timerResume() {
-        //Test if timerResume is called when resuming the video
-        println("callbackResume")
-
         if (!youtubeVideoResume) {
             //youtubeVideoResume is false means the video is playing for the first time
+            //start the countdown timer with current exercise duration
+            timerStart(currentExerciseDuration.toLong() * 1000)
             //change the boolean flag to true as all calls after this will be video resuming
             youtubeVideoResume = true
-            return
         } else {
-            //TODO1: Fatal Exception: Only the original thread that created a view hierarchy can touch its views.
-            //Try runOnUiThread {}
-
             //youtubeVideoResume is true means the video is resuming from pausing state
             //start a new timer with the time remaining
             timerStart(timeRemain)
