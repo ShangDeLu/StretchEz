@@ -60,17 +60,25 @@
         }
           
       }
+
+      //Call this function to stop the current video
       function stopVideo() {
         player.stopVideo();
       }
 
-      //Call the methods in Kotlin file from JavaScript file.
+      //Call functions in Kotlin file from JavaScript file.
       //Receive the videoID from Kotlin file and convert it to single quotation mark.
       //Return the videoID with single quotation mark.
       function showMessage() {
         var videoID = JSBridge.showMessageInNative();
         singleVideoID = videoID.replace(/"/g, "'");
         return singleVideoID;
+      }
+
+      //Receive the videoID from Kotlin file and call player.cueVideoById() to play the video.
+      //This function will be called by Kotlin file with the videoID.
+      function playVideoById(videoID) {
+        player.cueVideoById(videoID);
       }
 
     </script>

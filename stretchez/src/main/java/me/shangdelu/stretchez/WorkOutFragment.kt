@@ -85,10 +85,12 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
         @JavascriptInterface
         fun getDataFromJS(videoLifeCycle: String) {
+            //if JS passed "Paused" back, the countdownTimer should be paused
             if (videoLifeCycle == "Paused") {
                 //trigger the callback to pause the timer
                 cdTimerCallbacks?.timerPause()
             }
+            //if JS passed "Playing" back, the countdownTimer should be running
             if (videoLifeCycle == "Playing") {
                 //trigger the callback to resume the timer
                 cdTimerCallbacks?.timerResume()
@@ -116,6 +118,19 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         workOutFragmentViewModel.getExercisesOfPlan(stretchPlanID).observe(viewLifecycleOwner) {
             //set webView
             webView = view.findViewById(R.id.webVideo) as WebView
+            //hide the webView
+            webView.visibility = View.INVISIBLE
+
+            //set videoView
+            videoView = view.findViewById(R.id.workOutVideo) as VideoView
+            videoView.visibility = View.INVISIBLE
+
+            //set countdown timer text
+            cdTimerText = view.findViewById(R.id.cdTimer) as TextView
+
+            repeatButton = view.findViewById(R.id.repeat_button) as Button
+            returnButton = view.findViewById(R.id.return_button) as Button
+            intervalTextView = view.findViewById(R.id.interval_textView) as TextView
 
             //retrieve the list of exercises of stretchPlanID from LiveData
             exercises = it
@@ -146,6 +161,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 //                        return false
 //                    }
 //                }
+                //show the webView as current video is a youtube video
+                webView.visibility = View.VISIBLE
 
                 //create the object of JSBridge class
                 jsBridge = JSBridge(currentVideoID)
@@ -159,52 +176,53 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                 webView.settings.javaScriptEnabled = true
                 webView.settings.domStorageEnabled = true
                 webView.settings.allowFileAccess = true
+
+            } else { //currentVideoID is an empty string, meaning it's not a youtube video
+                //show the videoView as current video is not a youtube video.
+                videoView.visibility = View.VISIBLE
+
+                //set the link of first exercise in exercises for videoView
+                //videoView.setVideoURI(Uri.parse(exercises[currentExercise].exerciseLink))
+                videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
+                videoView.setOnPreparedListener { mp ->
+                    //get a reference of mp
+                    mediaPlayer = mp
+                    //loop the demonstration of current exercise
+                    mp.isLooping = true
+                }
+
+                //set a onClickListener to control the state of the mediaPlayer.
+                videoView.setOnClickListener {
+                    if (playingFlag) {
+                        //if mediaPlayer is currently playing, pause it and change the state of flag
+                        mediaPlayer.pause()
+                        playingFlag = false
+                        //Pause the countdown timer
+                        timerPause()
+                    } else {
+                        //if mediaPlayer is currently pausing, start it and change the state of flag
+                        mediaPlayer.start()
+                        playingFlag = true
+                        //Resume the countdown timer
+                        timerResume()
+                    }
+                }
+
+                //Start the countdown timer
+                timerStart(current.exerciseDuration.toLong() * 1000)
+
+                //Start playing the exercise video
+                videoView.start()
             }
         }
 
-        cdTimerText = view.findViewById(R.id.cdTimer) as TextView
-        videoView = view.findViewById(R.id.workOutVideo) as VideoView
-        //set the link of first exercise in exercises for videoView
-        //videoView.setVideoURI(Uri.parse(exercises[currentExercise].exerciseLink))
-        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
-        videoView.setOnPreparedListener { mp ->
-            //get a reference of mp
-            mediaPlayer = mp
-            //loop the demonstration of current exercise
-            mp.isLooping = true
-        }
-
-        //TODO 1: Rest the videoID that is used in youtube iframe api, so different videos can be played.
-        //TODO 2: Use ExerciseControl to alter the index in exercises, so the video is played in the right order.
-        //TODO 3: Add the duration feature, so the user can choose the duration for each exercise.
-        //TODO 4: Find out why there are blank space on top of the cdTimer.
+        //TODO 1: Make sure the videoView option is also working correctly, and won't have any contradiction with webView.
+        //TODO 2: Make sure the spacing of each part of the view is right
+        //TODO 3: Find out why there are blank space on top of the cdTimer.
+        //TODO 4: Add the duration feature, so the user can choose the duration for each exercise.
+        //TODO 5: Possible feature: Schedule Planner and notification before the scheduled plan.
 
 
-        //Start the countdown timer
-        //timerStart(current.exerciseDuration.toLong() * 1000)
-
-        //Start playing the exercise video
-        //videoView.start()
-
-        repeatButton = view.findViewById(R.id.repeat_button) as Button
-        returnButton = view.findViewById(R.id.return_button) as Button
-        intervalTextView = view.findViewById(R.id.interval_textView) as TextView
-
-        videoView.setOnClickListener {
-            if (playingFlag) {
-                //if mediaPlayer is currently playing, pause it and change the state of flag
-                mediaPlayer.pause()
-                playingFlag = false
-                //Pause the countdown timer
-                timerPause()
-            } else {
-                //if mediaPlayer is currently pausing, start it and change the state of flag
-                mediaPlayer.start()
-                playingFlag = true
-                //Resume the countdown timer
-                timerResume()
-            }
-        }
 
         return view
     }
@@ -229,12 +247,27 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     }
 
     private fun repeat() {
-        //reset the countDownTimer and start it
+        //reset the stretch exercise list back to index 0
         val reset = exerciseControl.reset(exercises)
-        timerStart(reset.exerciseDuration.toLong() * 1000)
-        //reset video path and start playing
-        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
-        videoView.start()
+
+        //reset the youtubeVideoResume flag to false, since new exercise is incoming
+        youtubeVideoResume = false
+
+        //call getYoutubeVideoID to get the videoID for the first exercise
+        //and check if it's a youtube video link
+        val firstVideoID = getYoutubeVideoID(reset.exerciseLink)
+
+        //check if a videoID is successfully returned
+        if (firstVideoID != "") { //if firstVideoID is not an empty string, means a videoID has been returned.
+            //use evaluateJavascript to call the Queueing functions in the iframe api to play the first video.
+            webView.evaluateJavascript("playVideoById('$firstVideoID')", null)
+        } else { //firstVideoID is an empty string, meaning it's not a youtube video
+            //reset the timer with the duration of first exercise
+            timerStart(reset.exerciseDuration.toLong() * 1000)
+            //reset video path and start playing
+            videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
+            videoView.start()
+        }
         //make the repeat and return button disabled
         repeatButton.isEnabled = false
         returnButton.isEnabled = false
@@ -247,14 +280,17 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
         //Hide videoView
         videoView.visibility = View.INVISIBLE
+
         //Show the intervalTextView
         intervalTextView?.visibility = View.VISIBLE
         val nextExercise = resources.getString(R.string.next_exercise) + " " + exerciseControl.peekNext(exercises).exerciseName
         intervalTextView?.text = nextExercise
         val next = exerciseControl.moveNext(exercises) //move to the next exercise
+
         //setVideoURI as the link of next exercise in the stretchPlan
         //videoView.setVideoURI(Uri.parse(next.exerciseLink))
         videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch3))
+
 
         val intervalTimer = object : CountDownTimer(timeLengthMilli, 1000) {
             override fun onTick(milliTillFinish: Long) {
@@ -280,33 +316,17 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                 //get the videoID for the next exercise coming up
                 val nextVideoID = getYoutubeVideoID(next.exerciseLink)
 
-                //TODO: Two solutions for playing a different video on the iframe api player
-                //1: Create a new iframe api player with nextVideoID passing to it
-                //2: Try the queue functions built in the iframe api
-
                 //check if a videoID is successfully returned
                 if (nextVideoID != "") { //if nextVideoID is not an empty string, means a videoID has been returned.
-                    //load the youtube iframe api
-                    webView.loadUrl("file:///android_res/raw/youtubeiframeapi.html")
+                    //use evaluateJavascript to call the Queueing functions in the iframe api to play the next video.
+                    webView.evaluateJavascript("playVideoById('$nextVideoID')", null)
+                } else { //nextVideoID is an empty string, meaning it's not a youtube video
+                    //reset and start the countdownTimer (in the case if videoView is used)
+                    timerStart(next.exerciseDuration.toLong() * 1000)
 
-                    //pass the videoID to jsBridge
-                    jsBridge = JSBridge(nextVideoID)
-
-                    //set JavaScript Interface with videoID
-                    webView.addJavascriptInterface(jsBridge, "JSBridge")
-
-                    //if JavaScript usage is not required, delete this line.
-                    webView.settings.javaScriptEnabled = true
-                    webView.settings.domStorageEnabled = true
-                    webView.settings.allowFileAccess = true
+                    //start playing the next exercise
+                    videoView.start()
                 }
-
-
-                //reset and start the countdownTimer (in the case if videoView is used)
-                //timerStart(next.exerciseDuration.toLong() * 1000)
-
-                //start playing the next exercise
-                //videoView.start()
             }
         }
         intervalTimer.start()
@@ -335,8 +355,13 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                         intervalStart(interval.toLong() * 1000)
                     } else {
                         //currentExercise is the last exercise of the stretchPlan
-                        //will stop and release the media player instance and move to idle state
+                        //stop and release the media player instance and move to idle state
                         videoView.stopPlayback()
+
+                        //use evaluateJavascript to call stopVideo() in the javascript file
+                        //stop the current video as countdown timer finished
+                        webView.evaluateJavascript("stopVideo()", null)
+
                         cdTimerText?.text = getString(R.string.complete_time)
                         //enable the repeat and return button
                         repeatButton.isEnabled = true
