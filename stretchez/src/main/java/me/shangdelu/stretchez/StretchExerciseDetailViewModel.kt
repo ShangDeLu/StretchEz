@@ -1,9 +1,6 @@
 package me.shangdelu.stretchez
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import me.shangdelu.stretchez.database.StretchExercise
 
 //Manage the database query
@@ -17,7 +14,13 @@ class StretchExerciseDetailViewModel : ViewModel() {
     var exerciseLiveData: LiveData<StretchExercise?> =
         //A live data transformation is a way to set up a trigger-response relationship between
         //two LiveData objects.
-        Transformations.switchMap(exerciseIDLiveData) { exerciseID ->
+
+        //The old androidx.lifecycle when transformation is not removed yet
+//        Transformations.switchMap(exerciseIDLiveData) { exerciseID ->
+//            exerciseRepository.getExercise(exerciseID)}
+
+        //Trying the new way of using switchMap as androidx.lifecycle.transformation got removed
+        exerciseIDLiveData.switchMap { exerciseID ->
             exerciseRepository.getExercise(exerciseID)}
 
     //tell the ViewModel which exercise to be load

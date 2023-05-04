@@ -19,11 +19,12 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/white"
         android:textSize="50sp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/workOutVideo"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteX="133dp" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <VideoView
         android:id="@+id/workOutVideo"
@@ -56,8 +57,7 @@
         android:textColor="@color/white"
         android:textSize="25sp"
         android:visibility="gone"
-        tools:layout_editor_absoluteX="38dp"
-        tools:layout_editor_absoluteY="371dp"
+        app:layout_constraintVertical_bias="0.5"
         app:layout_constraintTop_toBottomOf="@+id/cdTimer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,12 +71,10 @@
         android:text="@string/repeat_button"
         android:textColor="@color/white"
         android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/return_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/return_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workOutVideo"
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintBaseline_toBaselineOf="@+id/return_button"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/return_button"
@@ -88,9 +86,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/repeat_button"
-        app:layout_constraintTop_toBottomOf="@+id/workOutVideo"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintStart_toEndOf="@+id/repeat_button"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

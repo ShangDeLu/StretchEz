@@ -1,9 +1,6 @@
 package me.shangdelu.stretchez
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
@@ -13,7 +10,13 @@ class StretchPlanDetailViewModel() : ViewModel() {
     private val stretchPlanIdLiveData = MutableLiveData<UUID>()
 
     var stretchPlanLiveData: LiveData<StretchPlan?> =
-        Transformations.switchMap(stretchPlanIdLiveData) { stretchPlanId ->
+        //The old androidx.lifecycle when transformation is not removed yet
+//        Transformations.switchMap(stretchPlanIdLiveData) { stretchPlanId ->
+//            stretchPlanRepository.getStretchPlan(stretchPlanId)
+//        }
+
+        //Trying the new way of using switchMap as androidx.lifecycle.transformation got removed
+        stretchPlanIdLiveData.switchMap { stretchPlanId ->
             stretchPlanRepository.getStretchPlan(stretchPlanId)
         }
 
