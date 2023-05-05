@@ -2,7 +2,6 @@ package me.shangdelu.stretchez
 
 import android.media.MediaPlayer
 import android.net.Uri
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.LayoutInflater
@@ -137,17 +136,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             //check if a videoID is successfully returned
             if (currentVideoID != "") { //if currentVideoID is not an empty string, means a videoID has been returned.
 
-                //TODO: Ask if this part of code is actually meaningful, or can be deleted
-                //setting web client with non-deprecated function
-//                webView.webViewClient = object: WebViewClient() {
-//                    override fun shouldOverrideUrlLoading(
-//                        view: WebView?,
-//                        request: WebResourceRequest?
-//                    ): Boolean {
-//                        return false
-//                    }
-//                }
-
                 //show the webView as current video is a youtube video
                 webView.visibility = View.VISIBLE
 
@@ -206,6 +194,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             mediaPlayer = mp
             //loop the demonstration of current exercise
             mp.isLooping = true
+            //requestFocus on videoView to prevent extra click needed to requestFocus.
+            videoView.requestFocus()
         }
 
         //set a onClickListener to control the state of the mediaPlayer.
@@ -226,14 +216,13 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             }
         }
 
-        //TODO 1: Make sure exercise with youtube link and exercise with local resource can coexist in the same plan.
-        //TODO 2: Add the duration feature, so the user can choose the duration for each exercise.
-        //TODO 2.1: Learn about Time input picker, and use it for input the duration.
-        //TODO 3: Add the interval feature, so the user can choose the interval between each exercise.
-        //TODO 4: Possible feature: Schedule Planner and notification before the scheduled plan.
-        //TODO 5: Hard code local video into the database as templates with correct path as exercise link.
-
-
+        //TODO 1: Add the duration feature, so the user can choose the duration for each exercise.
+        //TODO 1.1: Learn about Spinner, and use it for input the duration.
+        //TODO 1.2: Learn about text input formatter, as it is another solution for input the duration.
+        //TODO 2: Add the interval feature, so the user can choose the interval between each exercise.
+        //TODO 3: Possible feature: Schedule Planner and notification before the scheduled plan.
+        //TODO 3.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
+        //TODO 4: Hard code local video into the database as templates with correct path as exercise link.
 
         return view
     }
@@ -343,8 +332,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                     //videoView.setVideoURI(Uri.parse(next.exerciseLink))
                     videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch3))
 
-                    //TODO: Figure out why timer won't auto start when youtube video and local video combined.
-                    //reset and start the countdownTimer (in the case if videoView is used)
+                    //reset and start the countdownTimer
                     timerStart(next.exerciseDuration.toLong() * 1000)
 
                     //start playing the next exercise
@@ -374,6 +362,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                     if (!exerciseControl.endOfList(exercises)) {
                         //stop and release the media player instance and move to idle state
                         videoView.stopPlayback()
+                        //stop the current video as countdown timer finished
+                        webView.evaluateJavascript("stopVideo()", null)
                         //Start the interval countdown timer
                         intervalStart(interval.toLong() * 1000)
                     } else {
@@ -414,8 +404,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
 
 
     override fun timerPause() {
-        //test why the first click on videoView don't have any effect
-        println("pause")
         //stop the current timer
         timer.cancel()
     }

@@ -65,7 +65,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/stretch_exercise_duration"
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,15 +74,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_link" />
 
-    <EditText
-        android:id="@+id/stretch_exercise_duration"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/stretch_exercise_minute_label"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/stretch_exercise_duration"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:text="@string/stretch_exercise_minute_label"
+        app:layout_constraintEnd_toStartOf="@id/stretch_exercise_minute_spinner"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_duration" />
 
+    <TextView
+        android:id="@+id/stretch_exercise_second_label"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/stretch_exercise_second_label"
+        app:layout_constraintEnd_toStartOf="@id/stretch_exercise_second_spinner"
+        app:layout_constraintStart_toEndOf="@id/stretch_exercise_minute_spinner"
+        app:layout_constraintTop_toBottomOf="@id/stretch_exercise_duration"/>
+
+    <Spinner
+        android:id="@+id/stretch_exercise_minute_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:spinnerMode="dialog"
+        android:prompt="@string/stretch_exercise_minute"
+        app:layout_constraintEnd_toStartOf="@id/stretch_exercise_second_spinner"
+        app:layout_constraintStart_toEndOf="@id/stretch_exercise_minute_label"
+        app:layout_constraintTop_toBottomOf="@id/stretch_exercise_duration" />
+
+    <Spinner
+        android:id="@+id/stretch_exercise_second_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:spinnerMode="dialog"
+        android:prompt="@string/stretch_exercise_second"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/stretch_exercise_second_label"
+        app:layout_constraintTop_toBottomOf="@id/stretch_exercise_duration" />
 
     <Button
         android:id="@+id/stretch_exercise_save"
@@ -108,7 +142,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stretch_exercise_save"
-        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_duration" />
+        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_minute_label" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

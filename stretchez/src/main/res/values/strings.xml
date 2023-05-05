@@ -42,6 +42,10 @@
     <string name="stretch_exercise_name">Enter a name for the Stretch Exercise</string>
     <string name="stretch_exercise_description">Enter a description for the Stretch Exercise</string>
     <string name="stretch_exercise_link">Enter the link to the Stretch Exercise</string>
+    <string name="stretch_exercise_minute">Choose minutes for the Stretch Exercise</string>
+    <string name="stretch_exercise_second">Choose seconds for the Stretch Exercise</string>
+    <string name="stretch_exercise_minute_label">Minutes: </string>
+    <string name="stretch_exercise_second_label">Seconds: </string>
     <string name="new_exercise">New Exercise</string>
     <string name="title_home">Home</string>
     <string name="title_exercises">Exercises</string>

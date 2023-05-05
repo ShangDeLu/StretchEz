@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -26,6 +24,16 @@ class StretchExerciseFragment : Fragment() {
     private lateinit var stretchExerciseRepository: StretchPlanRepository
     private var argumentOption: Int = 0
     private var exerciseID: Int = 0
+    //Spinner for minute duration of StretchExercise
+    private lateinit var minuteSpinner: Spinner
+    //Spinner for second duration of StretchExercise
+    private lateinit var secondSpinner: Spinner
+    //create an array that stores the options of minute for StretchExercise
+    private var exerciseMinute = Array(61) {it}
+    //create an array that stores the options of second for StretchExercise
+    private var exerciseSecond = Array(60) {it}
+
+
     //Associate the Fragment with the ViewModel
     private val stretchExerciseDetailViewModel: StretchExerciseDetailViewModel by lazy {
         ViewModelProvider(this)[StretchExerciseDetailViewModel::class.java]
@@ -58,8 +66,32 @@ class StretchExerciseFragment : Fragment() {
         stretchExerciseSaveButton = view.findViewById(R.id.stretch_exercise_save) as Button
         stretchExerciseCancelButton = view.findViewById(R.id.stretch_exercise_cancel) as Button
 
+        minuteSpinner = view.findViewById(R.id.stretch_exercise_minute_spinner) as Spinner
+        secondSpinner = view.findViewById(R.id.stretch_exercise_second_spinner) as Spinner
+
+        //create the instance of ArrayAdapter having the list of minutes and seconds)
+        val minuteAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_item, exerciseMinute)
+        val secondAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_item, exerciseSecond)
+
+        //set simple layout resource file for each item of spinner
+        minuteAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        secondAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        //set the ArrayAdapter data on the spinner which binds data to spinner
+        minuteSpinner.adapter = minuteAdapter
+        secondSpinner.adapter = secondAdapter
+
+
         //Button to save current stretch exercise
         stretchExerciseSaveButton.setOnClickListener {
+            //get the item selected on minuteSpinner and save it as Int
+            val minute = minuteSpinner.selectedItem as Int
+            //get the item selected on secondSpinner and save it as Int
+            val second = secondSpinner.selectedItem as Int
+            //calculate the duration using selected item on both spinners
+            val duration = minute * 60 + second
+
+
             if (stretchExerciseName.text.toString().isEmpty()) {
                 Toast.makeText(this.context, R.string.no_title_toast, Toast.LENGTH_LONG).show()
             } else {
@@ -69,7 +101,8 @@ class StretchExerciseFragment : Fragment() {
                             exerciseID = exerciseID,
                             exerciseName = stretchExerciseName.text.toString(),
                             exerciseDescription = stretchExerciseDescription.text.toString(),
-                            exerciseLink = stretchExerciseLink.text.toString()
+                            exerciseLink = stretchExerciseLink.text.toString(),
+                            exerciseDuration = duration
                         )
                     )
                     findNavController().navigate(R.id.action_navigation_exercise_to_navigation_exercise_list)
@@ -79,7 +112,8 @@ class StretchExerciseFragment : Fragment() {
                         StretchExercise(
                             exerciseName = stretchExerciseName.text.toString(),
                             exerciseDescription = stretchExerciseDescription.text.toString(),
-                            exerciseLink = stretchExerciseLink.text.toString()
+                            exerciseLink = stretchExerciseLink.text.toString(),
+                            exerciseDuration = duration
                         )
                     )
                     findNavController().navigate(R.id.action_navigation_exercise_to_navigation_exercise_list)
@@ -107,10 +141,15 @@ class StretchExerciseFragment : Fragment() {
         }
     }
 
+
     private fun updateUI() {
         stretchExerciseName.setText(exercise.exerciseName)
         stretchExerciseDescription.setText(exercise.exerciseDescription)
         stretchExerciseLink.setText(exercise.exerciseLink)
+        //calculate the minute of the exercise and pass the index to the spinner
+        minuteSpinner.setSelection(exercise.exerciseDuration / 60)
+        //calculate the second of the exercise and pass the index to the spinner
+        secondSpinner.setSelection(exercise.exerciseDuration % 60)
     }
 
     //Use Fragment Arguments to pass the exerciseID, as Fragment arguments help keep fragment encapsulated
