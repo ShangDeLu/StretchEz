@@ -226,12 +226,12 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             }
         }
 
-        //TODO 1: Make sure the videoView option is also working correctly, and won't have any contradiction with webView.
-        //TODO 2: Make sure the spacing of each part of the view is right (Try constraintlayout.widget.Barrier)
-        //TODO 3: Find out why there are blank space on top of the cdTimer.
-        //TODO 4: Make sure exercise with youtube link and exercise with local resource can coexist in the same plan.
-        //TODO 4: Add the duration feature, so the user can choose the duration for each exercise.
-        //TODO 5: Possible feature: Schedule Planner and notification before the scheduled plan.
+        //TODO 1: Make sure exercise with youtube link and exercise with local resource can coexist in the same plan.
+        //TODO 2: Add the duration feature, so the user can choose the duration for each exercise.
+        //TODO 2.1: Learn about Time input picker, and use it for input the duration.
+        //TODO 3: Add the interval feature, so the user can choose the interval between each exercise.
+        //TODO 4: Possible feature: Schedule Planner and notification before the scheduled plan.
+        //TODO 5: Hard code local video into the database as templates with correct path as exercise link.
 
 
 
@@ -343,6 +343,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                     //videoView.setVideoURI(Uri.parse(next.exerciseLink))
                     videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch3))
 
+                    //TODO: Figure out why timer won't auto start when youtube video and local video combined.
                     //reset and start the countdownTimer (in the case if videoView is used)
                     timerStart(next.exerciseDuration.toLong() * 1000)
 

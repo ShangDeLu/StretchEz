@@ -8,11 +8,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import me.shangdelu.stretchez.database.StretchExercise
-import me.shangdelu.stretchez.ui.main.ui.notifications.StretchExerciseListFragment
 
 private const val TAG = "StretchExerciseFragment"
 private const val ARG_EXERCISE_ID = "exercise_id"

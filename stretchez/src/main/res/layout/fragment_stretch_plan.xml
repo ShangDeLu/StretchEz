@@ -61,10 +61,20 @@
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/stretch_plan_duration_label"
+        android:text="@string/stretch_plan_interval_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stretch_plan_description" />
+
+    <EditText
+        android:id="@+id/stretch_plan_interval_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/stretch_plan_interval"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"/>
+
 
     <Button
         android:id="@+id/stretch_plan_start"
@@ -75,7 +85,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/stretch_plan_interval_description" />
 
 
     <Button

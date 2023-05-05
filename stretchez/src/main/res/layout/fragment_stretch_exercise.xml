@@ -47,6 +47,7 @@
 
     <TextView
         android:id="@+id/textView6"
+        style="?android:listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/stretch_exercise_link_label"
@@ -62,6 +63,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView7"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/stretch_plan_duration_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_link" />
+
+    <EditText
+        android:id="@+id/stretch_exercise_duration"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/stretch_exercise_duration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
 
     <Button
@@ -88,7 +108,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stretch_exercise_save"
-        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_link" />
+        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_duration" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
