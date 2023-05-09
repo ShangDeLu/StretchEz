@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/stretch_plan_interval"
         style="?android:listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,15 +66,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stretch_plan_description" />
 
-    <EditText
-        android:id="@+id/stretch_plan_interval_description"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/stretch_plan_interval_second_label"
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/stretch_plan_interval"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="10dp"
+        android:text="@string/stretch_exercise_second_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"/>
+        app:layout_constraintEnd_toStartOf="@id/stretch_plan_vertical_guideline"
+        app:layout_constraintTop_toBottomOf="@id/stretch_plan_interval"
+        app:layout_constraintBottom_toTopOf="@id/stretch_plan_start"/>
 
+    <Spinner
+        android:id="@+id/stretch_plan_interval_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:spinnerMode="dialog"
+        android:prompt="@string/stretch_plan_interval_prompt"
+        app:layout_constraintStart_toEndOf="@id/stretch_plan_vertical_guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stretch_plan_interval"
+        app:layout_constraintBottom_toTopOf="@id/stretch_plan_start"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/stretch_plan_vertical_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
 
     <Button
         android:id="@+id/stretch_plan_start"
@@ -85,7 +106,8 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stretch_plan_interval_description" />
+        app:layout_constraintTop_toBottomOf="@+id/stretch_plan_interval_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/stretch_plan_save"/>
 
 
     <Button
@@ -99,14 +121,14 @@
         android:textColor="@color/white"
         app:layout_constraintBaseline_toBaselineOf="@+id/stretch_plan_cancel"
         app:layout_constraintEnd_toStartOf="@+id/stretch_plan_cancel"
+        app:layout_constraintTop_toBottomOf="@id/stretch_plan_start"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/stretch_plan_cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="20dp"
+        android:layout_margin="20dp"
         android:background="@color/bright_lavender"
         android:text="@string/return_button"
         android:textColor="@color/white"

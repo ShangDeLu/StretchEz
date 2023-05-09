@@ -199,7 +199,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         }
 
         //set a onClickListener to control the state of the mediaPlayer.
-        //TODO: Make sure this won't be triggered after countdownTimer stops
+        //TODO: Maybe try to set the Listener on a separate button
         videoView.setOnClickListener {
             if (playingFlag) {
                 //if mediaPlayer is currently playing, pause it and change the state of flag
@@ -216,13 +216,11 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             }
         }
 
-        //TODO 1: Add the duration feature, so the user can choose the duration for each exercise.
-        //TODO 1.1: Learn about Spinner, and use it for input the duration.
-        //TODO 1.2: Learn about text input formatter, as it is another solution for input the duration.
-        //TODO 2: Add the interval feature, so the user can choose the interval between each exercise.
+        //TODO 1: Set Error Message on EditText when user enters wrong input or left it blank.
+        //TODO 1.1: Learn and try TextInputLayout.
+        //TODO 2: Hard code local video into the database as templates with correct path as exercise link.
         //TODO 3: Possible feature: Schedule Planner and notification before the scheduled plan.
         //TODO 3.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
-        //TODO 4: Hard code local video into the database as templates with correct path as exercise link.
 
         return view
     }

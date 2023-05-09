@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -30,6 +28,11 @@ class StretchPlanFragment : Fragment() {
     private lateinit var argumentWorkOut: Bundle
     private var argumentOption: Int = 0
     private var stretchPlanId: UUID? = null
+    //create an array that stores the options of seconds for interval of StretchPlan
+    private var planIntervals = Array(6) {(it + 1) * 5}
+    //Spinner for interval of StretchPlan
+    private lateinit var intervalSpinner: Spinner
+
     private val stretchPlanDetailViewModel: StretchPlanDetailViewModel by lazy {
         ViewModelProvider(this)[StretchPlanDetailViewModel::class.java]
     }
@@ -43,13 +46,8 @@ class StretchPlanFragment : Fragment() {
         }
         stretchPlanRepository = StretchPlanRepository.get()
         argumentOption = arguments?.getInt("Option") ?: 0
-        //length of interval between exercises, default at 5 for now, could be parameter of data class later.
-        val interval: Int = 5
         //Put stretchPlanId and argumentOption into a bundle for selectActionFragment
         argumentSelectAction = SelectActionFragment.newInstance(stretchPlanId, argumentOption)
-        //Put stretchPlanId, argumentOption and interval into a bundle for WorkOutFragment
-        argumentWorkOut = WorkOutFragment.newInstance(stretchPlanId, argumentOption, interval)
-
     }
 
     override fun onCreateView(
@@ -65,6 +63,17 @@ class StretchPlanFragment : Fragment() {
         selectActionButton = view.findViewById(R.id.select_action) as Button
         stretchPlanSaveButton = view.findViewById(R.id.stretch_plan_save) as Button
         stretchPlanCancelButton = view.findViewById(R.id.stretch_plan_cancel) as Button
+
+        intervalSpinner = view.findViewById(R.id.stretch_plan_interval_spinner) as Spinner
+
+        //create the instance of ArrayAdapter having the list of minutes and seconds)
+        val intervalAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_item, planIntervals)
+
+        //set simple layout resource file for each item of spinner
+        intervalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        //set the ArrayAdapter data on the spinner which binds data to spinner
+        intervalSpinner.adapter = intervalAdapter
 
         //Button to stretching
         stretchPlanStartButton.setOnClickListener {
@@ -88,15 +97,19 @@ class StretchPlanFragment : Fragment() {
 
         //Button to save current stretch plan
         stretchPlanSaveButton.setOnClickListener {
+            //get the item selected on intervalSpinner and save it as Int
+            val interval = intervalSpinner.selectedItem as Int
+
             if (stretchPlanTitle.text.toString().isEmpty()) {
                 Toast.makeText(this.context, R.string.no_title_toast, Toast.LENGTH_LONG).show()
             } else {
                 if (argumentOption == 0) { //when plan already exist, option = 0
                     stretchPlanRepository.updateStretchPlan(
                         StretchPlan(
-                        id = stretchPlanId!!,
-                        title = stretchPlanTitle.text.toString(),
-                        description = stretchPlanDescription.text.toString(), duration = 60
+                            id = stretchPlanId!!,
+                            title = stretchPlanTitle.text.toString(),
+                            description = stretchPlanDescription.text.toString(),
+                            duration = interval
                     ))
                     findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_stretch_plan_list)
 
@@ -104,7 +117,8 @@ class StretchPlanFragment : Fragment() {
                     stretchPlanRepository.addStretchPlan(
                         StretchPlan(
                             title = stretchPlanTitle.text.toString(),
-                            description = stretchPlanDescription.text.toString(), duration = 60
+                            description = stretchPlanDescription.text.toString(),
+                            duration = interval
                     ))
                     findNavController().navigate(R.id.action_navigation_stretch_plan_to_navigation_stretch_plan_list)
                 }
@@ -127,6 +141,8 @@ class StretchPlanFragment : Fragment() {
             stretchPlan?.let {
                 this.stretchPlan = stretchPlan
                 updateUI()
+                //Put stretchPlanId, argumentOption and interval into a bundle for WorkOutFragment
+                argumentWorkOut = WorkOutFragment.newInstance(stretchPlanId, argumentOption, stretchPlan.duration)
             }
         }
     }
@@ -134,6 +150,8 @@ class StretchPlanFragment : Fragment() {
     private fun updateUI() {
         stretchPlanTitle.setText(stretchPlan.title)
         stretchPlanDescription.setText(stretchPlan.description)
+        //Use stretchPlan.duration to calculate the index of the interval in the array and pass it to the spinner
+        intervalSpinner.setSelection((stretchPlan.duration / 5) - 1)
     }
 
     companion object {
