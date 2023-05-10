@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.StretchEz" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--Change the parent from AppCompat to MaterialComponents for TextInputLayout -->
+    <style name="Theme.StretchEz" parent="Theme.MaterialComponents.Light.DarkActionBar.Bridge">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/bright_lavender</item>
         <item name="colorPrimaryVariant">@color/light_pastel_purple</item>

@@ -8,70 +8,66 @@
     android:layout_margin="16dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout"
+        android:id="@+id/stretch_exercise_name_container"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toTopOf="@id/stretch_exercise_description_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/stretch_exercise_name_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/stretch_exercise_name"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/stretch_exercise_description_container"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        app:layout_constraintBottom_toTopOf="@id/stretch_exercise_link_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/stretch_exercise_name_container">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/stretch_exercise_description_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/stretch_exercise_description"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/stretch_exercise_link_container"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/stretch_exercise_description_container"
+        app:layout_constraintBottom_toTopOf="@id/stretch_exercise_duration">
 
-    <TextView
-        android:id="@+id/textView4"
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/stretch_exercise_name_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/stretch_exercise_link_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/stretch_exercise_link"
+            android:inputType="text" />
 
-    <EditText
-        android:id="@+id/stretch_exercise_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/stretch_exercise_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-    <TextView
-        android:id="@+id/textView5"
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/stretch_exercise_description_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_name" />
-
-    <EditText
-        android:id="@+id/stretch_exercise_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/stretch_exercise_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-    <TextView
-        android:id="@+id/textView6"
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/stretch_exercise_link_label"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_description" />
-
-    <EditText
-        android:id="@+id/stretch_exercise_link"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/stretch_exercise_link"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/stretch_exercise_duration"
@@ -81,7 +77,8 @@
         android:text="@string/stretch_plan_duration_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/stretch_exercise_link" />
+        app:layout_constraintTop_toBottomOf="@id/stretch_exercise_link_container"
+        app:layout_constraintBottom_toTopOf="@id/stretch_exercise_minute_label"/>
 
     <TextView
         android:id="@+id/stretch_exercise_minute_label"

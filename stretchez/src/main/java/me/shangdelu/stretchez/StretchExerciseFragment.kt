@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputEditText
 import me.shangdelu.stretchez.database.StretchExercise
 
 private const val TAG = "StretchExerciseFragment"
@@ -16,9 +17,9 @@ private const val ARG_EXERCISE_ID = "exercise_id"
 class StretchExerciseFragment : Fragment() {
 
     private lateinit var exercise: StretchExercise
-    private lateinit var stretchExerciseName: EditText
-    private lateinit var stretchExerciseDescription: EditText
-    private lateinit var stretchExerciseLink: EditText
+    private lateinit var stretchExerciseName: TextInputEditText
+    private lateinit var stretchExerciseDescription: TextInputEditText
+    private lateinit var stretchExerciseLink: TextInputEditText
     private lateinit var stretchExerciseSaveButton: Button
     private lateinit var stretchExerciseCancelButton: Button
     private lateinit var stretchExerciseRepository: StretchPlanRepository
@@ -60,9 +61,9 @@ class StretchExerciseFragment : Fragment() {
         //inflate the fragment's view
         val view = inflater.inflate(R.layout.fragment_stretch_exercise, container, false)
 
-        stretchExerciseName = view.findViewById(R.id.stretch_exercise_name) as EditText
-        stretchExerciseDescription = view.findViewById(R.id.stretch_exercise_description) as EditText
-        stretchExerciseLink = view.findViewById(R.id.stretch_exercise_link) as EditText
+        stretchExerciseName = view.findViewById(R.id.stretch_exercise_name_editText) as TextInputEditText
+        stretchExerciseDescription = view.findViewById(R.id.stretch_exercise_description_editText) as TextInputEditText
+        stretchExerciseLink = view.findViewById(R.id.stretch_exercise_link_editText) as TextInputEditText
         stretchExerciseSaveButton = view.findViewById(R.id.stretch_exercise_save) as Button
         stretchExerciseCancelButton = view.findViewById(R.id.stretch_exercise_cancel) as Button
 
