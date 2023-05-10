@@ -1,14 +1,18 @@
 package me.shangdelu.stretchez
 
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import me.shangdelu.stretchez.database.StretchExercise
 
 private const val TAG = "StretchExerciseFragment"
@@ -17,6 +21,8 @@ private const val ARG_EXERCISE_ID = "exercise_id"
 class StretchExerciseFragment : Fragment() {
 
     private lateinit var exercise: StretchExercise
+    private lateinit var stretchExerciseNameContainer: TextInputLayout
+    private lateinit var stretchExerciseLinkContainer: TextInputLayout
     private lateinit var stretchExerciseName: TextInputEditText
     private lateinit var stretchExerciseDescription: TextInputEditText
     private lateinit var stretchExerciseLink: TextInputEditText
@@ -66,7 +72,8 @@ class StretchExerciseFragment : Fragment() {
         stretchExerciseLink = view.findViewById(R.id.stretch_exercise_link_editText) as TextInputEditText
         stretchExerciseSaveButton = view.findViewById(R.id.stretch_exercise_save) as Button
         stretchExerciseCancelButton = view.findViewById(R.id.stretch_exercise_cancel) as Button
-
+        stretchExerciseNameContainer = view.findViewById(R.id.stretch_exercise_name_container) as TextInputLayout
+        stretchExerciseLinkContainer = view.findViewById(R.id.stretch_exercise_link_container) as TextInputLayout
         minuteSpinner = view.findViewById(R.id.stretch_exercise_minute_spinner) as Spinner
         secondSpinner = view.findViewById(R.id.stretch_exercise_second_spinner) as Spinner
 
@@ -83,6 +90,12 @@ class StretchExerciseFragment : Fragment() {
         secondSpinner.adapter = secondAdapter
 
 
+        //Once the Exercise Name input is not empty, stop showing the error message
+        if (stretchExerciseName.text.toString().isNotEmpty()) {
+            stretchExerciseNameContainer.isErrorEnabled = false
+        }
+
+
         //Button to save current stretch exercise
         stretchExerciseSaveButton.setOnClickListener {
             //get the item selected on minuteSpinner and save it as Int
@@ -94,7 +107,8 @@ class StretchExerciseFragment : Fragment() {
 
 
             if (stretchExerciseName.text.toString().isEmpty()) {
-                Toast.makeText(this.context, R.string.no_title_toast, Toast.LENGTH_LONG).show()
+                //if Exercise Name is empty, show an error message to the user
+                stretchExerciseNameContainer.error = "Enter the name of the exercise"
             } else {
                 if (argumentOption == 0) { //when exercise already exist, option = 0
                     stretchExerciseRepository.updateExercise(

@@ -14,6 +14,7 @@
     <color name="text_black">#252121</color>
     <color name="transparent">#00000000</color>
     <color name="dark_grey">#535252</color>
+    <color name="red_primary">#ff0000</color>
     <color name="red">#e46363</color>
     <color name="pink">#EC9292</color>
     <color name="light_grey">#dedddd</color>

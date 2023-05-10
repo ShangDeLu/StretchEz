@@ -16,4 +16,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <!-- Set the textColor for error message -->
+    <style name="error_appearance" parent="@android:style/TextAppearance">
+        <item name="errorTextAppearance">@color/red_primary</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
