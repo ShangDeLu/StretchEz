@@ -216,9 +216,9 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             }
         }
 
-        //TODO 1: Set Error Message on EditText when user enters wrong input or left it blank.
-        //TODO 1.1: Learn and try TextInputLayout.
-        //TODO 2: Hard code local video into the database as templates with correct path as exercise link.
+        //TODO 1: Hard code local video into the database as templates with correct path as exercise link.
+        //TODO 1.1: User should not be able to edit Exercise Name, Description and Link of templates.
+        //TODO 2: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
         //TODO 3: Possible feature: Schedule Planner and notification before the scheduled plan.
         //TODO 3.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
 
@@ -226,6 +226,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     }
 
     private fun getYoutubeVideoID(videoUrl: String): String {
+        //TODO: Consider finding another pattern that can match a more variety of youtube link
         //Use pattern and matcher to get the youtube video ID from the URL link
         val youtubePattern = "(?<=watch]]?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
         val compiledPattern: Pattern = Pattern.compile(youtubePattern)

@@ -8,17 +8,20 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
 private const val TAG = "StretchPlanFragment"
 private const val ARG_STRETCH_PLAN_ID = "stretchPlan_id"
+private const val TITLE_ERROR = "Plan Title cannot be empty"
 
 class StretchPlanFragment : Fragment() {
 
     private lateinit var stretchPlan: StretchPlan
-    private lateinit var stretchPlanTitle: EditText
-    private lateinit var stretchPlanDescription: EditText
+    private lateinit var stretchPlanTitle: TextInputEditText
+    private lateinit var stretchPlanDescription: TextInputEditText
     private lateinit var stretchPlanStartButton: Button
     private lateinit var selectActionButton: Button
     private lateinit var stretchPlanSaveButton: Button
@@ -32,6 +35,8 @@ class StretchPlanFragment : Fragment() {
     private var planIntervals = Array(6) {(it + 1) * 5}
     //Spinner for interval of StretchPlan
     private lateinit var intervalSpinner: Spinner
+    //TextInputLayout for StretchPlan Title Input
+    private lateinit var stretchPlanTitleContainer: TextInputLayout
 
     private val stretchPlanDetailViewModel: StretchPlanDetailViewModel by lazy {
         ViewModelProvider(this)[StretchPlanDetailViewModel::class.java]
@@ -57,14 +62,15 @@ class StretchPlanFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_stretch_plan, container, false)
 
-        stretchPlanTitle = view.findViewById(R.id.stretch_plan_title) as EditText
-        stretchPlanDescription = view.findViewById(R.id.stretch_plan_description) as EditText
+        stretchPlanTitle = view.findViewById(R.id.stretch_plan_title_editText) as TextInputEditText
+        stretchPlanDescription = view.findViewById(R.id.stretch_plan_description_editText) as TextInputEditText
         stretchPlanStartButton = view.findViewById(R.id.stretch_plan_start) as Button
         selectActionButton = view.findViewById(R.id.select_action) as Button
         stretchPlanSaveButton = view.findViewById(R.id.stretch_plan_save) as Button
         stretchPlanCancelButton = view.findViewById(R.id.stretch_plan_cancel) as Button
 
         intervalSpinner = view.findViewById(R.id.stretch_plan_interval_spinner) as Spinner
+        stretchPlanTitleContainer = view.findViewById(R.id.stretch_plan_title_container) as TextInputLayout
 
         //create the instance of ArrayAdapter having the list of minutes and seconds)
         val intervalAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_item, planIntervals)
@@ -74,6 +80,9 @@ class StretchPlanFragment : Fragment() {
 
         //set the ArrayAdapter data on the spinner which binds data to spinner
         intervalSpinner.adapter = intervalAdapter
+
+        //set the focus listener for plan title input
+        planTitleFocusListener()
 
         //Button to stretching
         stretchPlanStartButton.setOnClickListener {
@@ -101,7 +110,8 @@ class StretchPlanFragment : Fragment() {
             val interval = intervalSpinner.selectedItem as Int
 
             if (stretchPlanTitle.text.toString().isEmpty()) {
-                Toast.makeText(this.context, R.string.no_title_toast, Toast.LENGTH_LONG).show()
+                //if title input is empty, show an error message to the user
+                stretchPlanTitleContainer.error = TITLE_ERROR
             } else {
                 if (argumentOption == 0) { //when plan already exist, option = 0
                     stretchPlanRepository.updateStretchPlan(
@@ -143,6 +153,22 @@ class StretchPlanFragment : Fragment() {
                 updateUI()
                 //Put stretchPlanId, argumentOption and interval into a bundle for WorkOutFragment
                 argumentWorkOut = WorkOutFragment.newInstance(stretchPlanId, argumentOption, stretchPlan.duration)
+            }
+        }
+    }
+
+    private fun planTitleFocusListener() {
+        //use setOnFocusChangeListener on the StretchPlan Title input
+        stretchPlanTitle.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) { //once the title input lose focus
+                //check the state of title input
+                if (stretchPlanTitle.text.toString().isNotEmpty()) {
+                    //if title input is not empty, stop showing the error message
+                    stretchPlanTitleContainer.isErrorEnabled = false
+                } else {
+                    //if title input is empty, show an error message to the user
+                    stretchPlanTitleContainer.error = TITLE_ERROR
+                }
             }
         }
     }

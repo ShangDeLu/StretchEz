@@ -1,22 +1,25 @@
 package me.shangdelu.stretchez
 
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.core.content.ContextCompat
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import me.shangdelu.stretchez.database.StretchExercise
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 private const val TAG = "StretchExerciseFragment"
 private const val ARG_EXERCISE_ID = "exercise_id"
+private const val NAME_ERROR = "Exercise Name cannot be empty"
+private const val LINK_ERROR = "Invalid Video Link"
 
 class StretchExerciseFragment : Fragment() {
 
@@ -89,12 +92,10 @@ class StretchExerciseFragment : Fragment() {
         minuteSpinner.adapter = minuteAdapter
         secondSpinner.adapter = secondAdapter
 
-
-        //Once the Exercise Name input is not empty, stop showing the error message
-        if (stretchExerciseName.text.toString().isNotEmpty()) {
-            stretchExerciseNameContainer.isErrorEnabled = false
-        }
-
+        //set the focus listener for Exercise Name Input
+        exerciseNameFocusListener()
+        //set the focus listener for Exercise Link Input
+        exerciseLinkFocusListener()
 
         //Button to save current stretch exercise
         stretchExerciseSaveButton.setOnClickListener {
@@ -104,12 +105,21 @@ class StretchExerciseFragment : Fragment() {
             val second = secondSpinner.selectedItem as Int
             //calculate the duration using selected item on both spinners
             val duration = minute * 60 + second
+            //get the exercise link input
+            val linkText = stretchExerciseLink.text.toString()
 
+            if (!validExerciseLink(linkText)) {
+                //if the input is an invalid link, show an error message to the user
+                stretchExerciseLinkContainer.error = LINK_ERROR
+            }
 
             if (stretchExerciseName.text.toString().isEmpty()) {
-                //if Exercise Name is empty, show an error message to the user
-                stretchExerciseNameContainer.error = "Enter the name of the exercise"
-            } else {
+                //if Exercise Name input is empty, show an error message to the user
+                stretchExerciseNameContainer.error = NAME_ERROR
+            }
+
+            //Exercise Name input cannot be empty and Exercise Link need to be valid
+            if(stretchExerciseName.text.toString().isNotEmpty() && validExerciseLink(linkText)) {
                 if (argumentOption == 0) { //when exercise already exist, option = 0
                     stretchExerciseRepository.updateExercise(
                         StretchExercise(
@@ -154,6 +164,55 @@ class StretchExerciseFragment : Fragment() {
                 updateUI()
             }
         }
+    }
+
+    private fun exerciseNameFocusListener() {
+        //use setOnFocusChangeListener on the exercise name input
+        stretchExerciseName.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                //Once the Exercise Name Input lose focus, check the input
+                if (stretchExerciseName.text.toString().isNotEmpty()) {
+                    //If the Exercise Name input is not empty, stop showing the error message
+                    stretchExerciseNameContainer.isErrorEnabled = false
+                } else {
+                    //if Exercise Name input is empty, show an error message to the user
+                    stretchExerciseNameContainer.error = NAME_ERROR
+                }
+            }
+        }
+    }
+
+    private fun exerciseLinkFocusListener() {
+        //use setOnFocusChangeListener on the exercise link input
+        stretchExerciseLink.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                //Once the Exercise Link Input lose focus, check the input
+                val exerciseLinkText = stretchExerciseLink.text.toString()
+                //if the input is an valid link
+                if (validExerciseLink(exerciseLinkText)) {
+                    //stop showing the error message
+                    stretchExerciseLinkContainer.isErrorEnabled = false
+                } else {
+                    //if the input is an invalid link, show an error message to the user
+                    stretchExerciseLinkContainer.error = LINK_ERROR
+                }
+            }
+        }
+    }
+
+    private fun validExerciseLink(exerciseLink: String): Boolean {
+        //Use pattern and matcher to check if the input link is valid
+        val youtubePattern = "(?<=watch]]?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
+        val compiledPattern: Pattern = Pattern.compile(youtubePattern)
+        val matcher: Matcher = compiledPattern.matcher(exerciseLink)
+
+        //check if the link matches the pattern
+        if (matcher.find()) {
+            //if the pattern is matched, return true
+            return true
+        }
+        //otherwise, return false
+        return false
     }
 
 
