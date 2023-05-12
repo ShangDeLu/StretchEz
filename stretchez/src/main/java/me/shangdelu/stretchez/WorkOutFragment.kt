@@ -165,6 +165,9 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                 //Start the countdown timer
                 timerStart(current.exerciseDuration.toLong() * 1000)
 
+                //set the link of first exercise in exercises for videoView
+                videoView.setVideoURI(Uri.parse(currentExercise().exerciseLink))
+
                 //Start playing the exercise video
                 videoView.start()
             }
@@ -186,9 +189,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         returnButton = view.findViewById(R.id.return_button) as Button
         intervalTextView = view.findViewById(R.id.interval_textView) as TextView
 
-        //set the link of first exercise in exercises for videoView
-        //videoView.setVideoURI(Uri.parse(exercises[currentExercise].exerciseLink))
-        videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
         videoView.setOnPreparedListener { mp ->
             //get a reference of mp
             mediaPlayer = mp
@@ -216,6 +216,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             }
         }
 
+        //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
         //TODO 1: Hard code local video into the database as templates with correct path as exercise link.
         //TODO 1.1: User should not be able to edit Exercise Name, Description and Link of templates.
         //TODO 2: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
@@ -226,7 +227,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     }
 
     private fun getYoutubeVideoID(videoUrl: String): String {
-        //TODO: Consider finding another pattern that can match a more variety of youtube link
+        //TODO: Consider finding another pattern that can match a more variety of youtube link, or require a specific type of youtube url.
         //Use pattern and matcher to get the youtube video ID from the URL link
         val youtubePattern = "(?<=watch]]?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
         val compiledPattern: Pattern = Pattern.compile(youtubePattern)
@@ -268,7 +269,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             //reset the timer with the duration of first exercise
             timerStart(reset.exerciseDuration.toLong() * 1000)
             //reset video path and start playing
-            videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch1))
+            videoView.setVideoURI(Uri.parse(reset.exerciseLink))
             videoView.start()
         }
         //make the repeat and return button disabled
@@ -328,8 +329,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                     videoView.visibility = View.VISIBLE
 
                     //setVideoURI as the link of next exercise in the stretchPlan
-                    //videoView.setVideoURI(Uri.parse(next.exerciseLink))
-                    videoView.setVideoURI(Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.stretch3))
+                    videoView.setVideoURI(Uri.parse(next.exerciseLink))
 
                     //reset and start the countdownTimer
                     timerStart(next.exerciseDuration.toLong() * 1000)

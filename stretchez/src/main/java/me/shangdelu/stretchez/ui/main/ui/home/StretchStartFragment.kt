@@ -7,11 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import me.shangdelu.stretchez.R
+import me.shangdelu.stretchez.StretchPlanRepository
+import me.shangdelu.stretchez.database.StretchExercise
 import me.shangdelu.stretchez.databinding.FragmentStretchStartBinding
 
 class StretchStartFragment : Fragment() {
 
     private lateinit var binding: FragmentStretchStartBinding
+    private lateinit var stretchExerciseRepository: StretchPlanRepository
 
 //    private lateinit var piButton: Button
 //
@@ -25,6 +28,40 @@ class StretchStartFragment : Fragment() {
     ): View {
 
         binding = FragmentStretchStartBinding.inflate(inflater, container, false)
+
+        //initialize StretchExerciseRepository to add Template Exercise
+        stretchExerciseRepository = StretchPlanRepository.get()
+
+        //get the resource path of the templates
+        val template1Link = "android.resource://" + requireContext().packageName + "/" + R.raw.stretch1
+        val template2Link = "android.resource://" + requireContext().packageName + "/" + R.raw.stretch2
+        val template3Link = "android.resource://" + requireContext().packageName + "/" + R.raw.stretch3
+
+        //Hardcode templates into the database
+        stretchExerciseRepository.addTemplateExercise(
+            StretchExercise(
+                exerciseName = "Trapezius Stretch",
+                exerciseDescription = "Stretching the Trapezius muscle is a great way to relieve neck, shoulder, upper and middle back pain.",
+                exerciseLink = template1Link,
+                exerciseDuration = 30
+            )
+        )
+        stretchExerciseRepository.addTemplateExercise(
+            StretchExercise(
+                exerciseName = "Levator Scapulae Stretch",
+                exerciseDescription = "Stretching the Levator Scapulae muscle to relieve neck pain, and make you more resistant to stiff neck and neck pain",
+                exerciseLink = template2Link,
+                exerciseDuration = 30
+            )
+        )
+        stretchExerciseRepository.addTemplateExercise(
+            StretchExercise(
+                exerciseName = "Forearm Stretch",
+                exerciseDescription = "Stretch your forearms to increase their flexibility, and reduce the risk of injury",
+                exerciseLink = template3Link,
+                exerciseDuration = 30
+            )
+        )
 
 //        piButton = view.findViewById(R.id.pi_btn) as Button
 //

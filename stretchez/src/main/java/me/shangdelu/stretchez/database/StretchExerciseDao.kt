@@ -20,6 +20,10 @@ interface StretchExerciseDao {
     @Query("SELECT * FROM StretchExercise WHERE exerciseID=(:exerciseID)")
     fun getExercise(exerciseID: Int?): LiveData<StretchExercise?>
 
+    @Query("SELECT * FROM StretchExercise WHERE exerciseLink=(:exerciseLink)")
+    //find if hardcoded template exercise already exists using exerciseLink
+    fun getExerciseFromLink(exerciseLink: String?): LiveData<List<StretchExercise>>
+
     @Insert
     fun addExerciseToPlan(stretchExercise: StretchExercise)
 

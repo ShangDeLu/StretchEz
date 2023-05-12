@@ -58,6 +58,8 @@ class StretchPlanRepository private constructor(context: Context) {
 
     fun getExercise(exerciseID: Int?): LiveData<StretchExercise?> = stretchExerciseDao.getExercise(exerciseID)
 
+    fun getExerciseFromLink(exerciseLink: String?): LiveData<List<StretchExercise>> = stretchExerciseDao.getExerciseFromLink(exerciseLink)
+
     fun addExerciseToPlan(stretchExercise: StretchExercise) {
         executor.execute {
             stretchExerciseDao.addExerciseToPlan(stretchExercise)
