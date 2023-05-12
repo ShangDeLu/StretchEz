@@ -13,4 +13,7 @@ data class StretchExercise (@PrimaryKey(autoGenerate = true) var exerciseID: Int
                             var exerciseDescription: String = "",
                             var exerciseDuration: Int = 30,
                             var exerciseLink: String = "",
-                            var orderNumber: Int = -1)
+                            var orderNumber: Int = -1,
+                            //boolean check parameter for whether an exercise is a template,
+                            //0 means it's not a template, 1 means it is a template
+                            var isTemplate: Int = 0)

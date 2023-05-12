@@ -217,18 +217,23 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         }
 
         //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
-        //TODO 0.1: Ask about why Exercise 1-3 and plan 1 remain in the app even when app is removed once
+        //TODO 0.1: Figure out why Exercise1-3 and Plan1 exist after reinstall the app
         //TODO 1: Hard code local video into the database as templates with correct path as exercise link.
         //TODO 1.1: User should not be able to edit Exercise Name, Description and Link of templates.
+        //TODO 1.2: Learn about SharedPreference, ActivityLifeCycleCallbacks and observeForever.
+        //TODO 1.3: Add a boolean check parameter to exercise data class, to check whether an Exercise is a template.
+        //TODO 1.4: Prepopulate the room database with template exercise using createFromAsset("xxx.db")
+        //TODO 1.5: Use the boolean check parameter to decide whether TextInputEditText and SwipeToDelete can be used by user or not.
         //TODO 2: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
         //TODO 3: Possible feature: Schedule Planner and notification before the scheduled plan.
         //TODO 3.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
+        //TODO 4: Version 1: User can create a new plan, add exercise to plan and finish a stretching process without any guidance.
 
         return view
     }
 
     private fun getYoutubeVideoID(videoUrl: String): String {
-        //TODO: Consider finding another pattern that can match a more variety of youtube link, or require a specific type of youtube url.
+        //TODO: Use helper text and error message to guide user to use youtube url from the share tab.
         //Use pattern and matcher to get the youtube video ID from the URL link
         val youtubePattern = "(?<=watch]]?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
         val compiledPattern: Pattern = Pattern.compile(youtubePattern)

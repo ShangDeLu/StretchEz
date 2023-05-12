@@ -3,11 +3,7 @@ package me.shangdelu.stretchez
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
-import me.shangdelu.stretchez.database.StretchExercise
-import me.shangdelu.stretchez.database.StretchPlan
-import me.shangdelu.stretchez.database.StretchPlanDatabase
-import me.shangdelu.stretchez.database.migration_1_2
-import java.lang.IllegalStateException
+import me.shangdelu.stretchez.database.*
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -20,6 +16,8 @@ class StretchPlanRepository private constructor(context: Context) {
         StretchPlanDatabase::class.java,
         DATABASE_NAME
     ).addMigrations(migration_1_2)
+        .addMigrations(migration_3_4)
+        .createFromAsset("database/templates.db") //prepopulate templates into database
         .build()
 
     private val stretchPlanDao = database.stretchPlanDao()
