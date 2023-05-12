@@ -217,6 +217,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         }
 
         //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
+        //TODO 0.1: Ask about why Exercise 1-3 and plan 1 remain in the app even when app is removed once
         //TODO 1: Hard code local video into the database as templates with correct path as exercise link.
         //TODO 1.1: User should not be able to edit Exercise Name, Description and Link of templates.
         //TODO 2: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
