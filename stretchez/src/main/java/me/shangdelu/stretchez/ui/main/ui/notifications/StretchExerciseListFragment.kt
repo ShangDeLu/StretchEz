@@ -100,7 +100,7 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
         //This code block executed whenever the LiveData's list gets updated.
         { stretchExercises ->
             stretchExercises?.let {
-                Log.i(TAG, "Got stretchExercises ${stretchExercises.size}")
+                //Log.i(TAG, "Got stretchExercises ${stretchExercises.size}")
                 updateUI(stretchExercises)
             }
         }

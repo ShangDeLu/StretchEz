@@ -4,9 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!--change allowBackup and fullBackupOnly to false to prevent database restored after uninstall,
+    hence data that supposed to be prepopulate can function properly-->
     <application
         android:name="me.shangdelu.stretchez.StretchEzApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
+        android:fullBackupOnly="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"

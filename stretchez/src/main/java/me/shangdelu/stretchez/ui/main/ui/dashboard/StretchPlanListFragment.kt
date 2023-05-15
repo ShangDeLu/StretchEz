@@ -66,23 +66,24 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
                 val currentId = adapter?.stretchPlans?.get(position)
                 currentId?.let {
                     //get current timestamp of the stretch plan
-                    it.timestamp = System.currentTimeMillis();
-                    //update the timestamp of current stretch plan
-                    stretchPlanListViewModel.updateStretchPlan(it)
+                    //it.timestamp = System.currentTimeMillis();
+
+                    //delete the current stretch plan
+                    stretchPlanListViewModel.deleteStretchPlan(it)
                 }
 
-                val deleteSnackbar = Snackbar.make(stretchPlanCoordinatorLayout,
-                    R.string.delete_plan_snackbar, Snackbar.LENGTH_LONG)
+//                val deleteSnackbar = Snackbar.make(stretchPlanCoordinatorLayout,
+//                    R.string.delete_plan_snackbar, Snackbar.LENGTH_LONG)
+//
+//                deleteSnackbar.setAction(R.string.undo_delete_snackbar) {
+//                    currentId?.let {
+//                        it.timestamp = null
+//                        stretchPlanListViewModel.updateStretchPlan(it)
+//                    }
+//                }
 
-                deleteSnackbar.setAction(R.string.undo_delete_snackbar) {
-                    currentId?.let {
-                        it.timestamp = null
-                        stretchPlanListViewModel.updateStretchPlan(it)
-                    }
-                }
-
-                deleteSnackbar.setActionTextColor(Color.WHITE)
-                deleteSnackbar.show()
+//                deleteSnackbar.setActionTextColor(Color.WHITE)
+//                deleteSnackbar.show()
             }
         }
         
@@ -100,7 +101,7 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
         stretchPlanListViewModel.stretchPlanListLiveData.observe(viewLifecycleOwner)
         { stretchPlans ->
             stretchPlans?.let {
-                Log.i(TAG, "GOT ${stretchPlans.size} stretchPlans")
+                //Log.i(TAG, "GOT ${stretchPlans.size} stretchPlans")
                 updateUI(stretchPlans)
             }
         }
