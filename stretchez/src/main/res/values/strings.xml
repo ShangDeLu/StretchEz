@@ -56,6 +56,8 @@
     <string name="remove_action_snackbar">Exercise Removed</string>
     <string name="next_exercise">Next Exercise: </string>
     <string name="helper_text_required">*Required</string>
+    <string name="helper_text_youtube_link">Insert the video link from the Youtube Share Tab</string>
+    <string name="template_exercise_snackbar">Template Exercise cannot be deleted</string>
 
     <string name="raspberry_test">Pi Test</string>
     <string name="test_button">Test</string>

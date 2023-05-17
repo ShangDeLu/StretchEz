@@ -108,8 +108,9 @@ class StretchExerciseFragment : Fragment() {
             //get the exercise link input
             val linkText = stretchExerciseLink.text.toString()
 
-            if (!validExerciseLink(linkText)) {
-                //if the input is an invalid link, show an error message to the user
+            if (!validExerciseLink(linkText) && exercise.isTemplate == 0) {
+                //if the input is an invalid link, and exercise is not a template
+                //show an error message to the user
                 stretchExerciseLinkContainer.error = LINK_ERROR
             }
 
@@ -118,9 +119,16 @@ class StretchExerciseFragment : Fragment() {
                 stretchExerciseNameContainer.error = NAME_ERROR
             }
 
-            //Exercise Name input cannot be empty and Exercise Link need to be valid
-            if(stretchExerciseName.text.toString().isNotEmpty() && validExerciseLink(linkText)) {
-                if (argumentOption == 0) { //when exercise already exist, option = 0
+            //Exercise Name input cannot be empty and Exercise Link need to be valid, ignore if it's an template exercise.
+            if((stretchExerciseName.text.toString().isNotEmpty() && validExerciseLink(linkText)) || exercise.isTemplate == 1) {
+                if (exercise.isTemplate == 1) { //when exercise is an template exercise
+                    stretchExerciseRepository.updateExercise(
+                        //only update changes in exerciseDuration, while others should be immutable.
+                        StretchExercise(
+                            exerciseDuration = duration
+                        )
+                    )
+                } else if (argumentOption == 0) { //when exercise already exist, option = 0
                     stretchExerciseRepository.updateExercise(
                         StretchExercise(
                             exerciseID = exerciseID,
@@ -217,9 +225,24 @@ class StretchExerciseFragment : Fragment() {
 
 
     private fun updateUI() {
-        stretchExerciseName.setText(exercise.exerciseName)
-        stretchExerciseDescription.setText(exercise.exerciseDescription)
-        stretchExerciseLink.setText(exercise.exerciseLink)
+        //check the isTemplate of the exercise
+        if (exercise.isTemplate == 1) { //if isTemplate is 1, exercise is a template
+            //setText for the name and description of the exercise
+            stretchExerciseName.setText(exercise.exerciseName)
+            stretchExerciseDescription.setText(exercise.exerciseDescription)
+            //set ExerciseName and ExerciseDescription to not focusable,
+            //user should not be able to change that of template exercise
+            stretchExerciseName.isFocusable = false
+            stretchExerciseDescription.isFocusable = false
+            //do not show link of the local resource of template exercise by disable
+            //textInputEditText of ExerciseLink
+            stretchExerciseLink.isEnabled = false
+        } else { //isTemplate is 0, exercise is not a template
+            //setText for the name, description and link of the exercise
+            stretchExerciseName.setText(exercise.exerciseName)
+            stretchExerciseDescription.setText(exercise.exerciseDescription)
+            stretchExerciseLink.setText(exercise.exerciseLink)
+        }
         //calculate the minute of the exercise and pass the index to the spinner
         minuteSpinner.setSelection(exercise.exerciseDuration / 60)
         //calculate the second of the exercise and pass the index to the spinner

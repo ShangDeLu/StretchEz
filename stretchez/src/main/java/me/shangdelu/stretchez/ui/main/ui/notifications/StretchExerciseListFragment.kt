@@ -69,16 +69,25 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
                 val currentId = exerciseAdapter?.stretchExercises?.get(position)
-                stretchExerciseViewModel.deleteExercise(currentId!!)
+                //check the isTemplate of the Stretch Exercise
+                if (currentId?.isTemplate == 1) { //if isTemplate is 1, current exercise is a template.
+                    //template exercise should be non-deletable, move current exercise back to the initial position
+                    exerciseAdapter?.notifyItemChanged(viewHolder.bindingAdapterPosition)
 
-                val deleteSnackbar = Snackbar.make(stretchExerciseCoordinatorLayout,
-                    R.string.delete_exercise_snackbar, Snackbar.LENGTH_LONG)
-
-                //TODO: Implement the UNDO part for swipe to delete
-
-
-                deleteSnackbar.setActionTextColor(Color.WHITE)
-                deleteSnackbar.show()
+                    //Use a snack bar to notify user template is non-deletable
+                    val templateMessage = Snackbar.make(stretchExerciseCoordinatorLayout,
+                        R.string.template_exercise_snackbar, Snackbar.LENGTH_LONG)
+                    templateMessage.setActionTextColor(Color.WHITE)
+                    templateMessage.show()
+                } else { //if isTemplate is 0, current exercise is not a template.
+                    //exercise is deletable, delete the exercise
+                    stretchExerciseViewModel.deleteExercise(currentId!!)
+                    //notify user the delete is success.
+                    val deleteMessage = Snackbar.make(stretchExerciseCoordinatorLayout,
+                        R.string.delete_exercise_snackbar, Snackbar.LENGTH_LONG)
+                    deleteMessage.setActionTextColor(Color.WHITE)
+                    deleteMessage.show()
+                }
             }
         }
 
@@ -137,7 +146,6 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
 
     //Set up StretchExerciseListFragment's UI
     private fun updateUI(stretchExercises: List<StretchExercise>) {
-
         exerciseAdapter = StretchExerciseAdapter(stretchExercises)
         stretchExerciseRecyclerView.adapter = exerciseAdapter
     }
@@ -171,7 +179,6 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
             //argument option is 0 as we are clicking on existing exercise
             onExerciseSelected(stretchExercise.exerciseID, 0)
         }
-
     }
 
     //RecyclerView does not create ViewHolder directly, instead it asks an adapter.

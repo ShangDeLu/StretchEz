@@ -1,25 +1,23 @@
 package me.shangdelu.stretchez.ui.main.ui.dashboard
 
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import me.shangdelu.stretchez.*
+import me.shangdelu.stretchez.R
+import me.shangdelu.stretchez.StretchPlanFragment
+import me.shangdelu.stretchez.StretchPlanListViewModel
+import me.shangdelu.stretchez.SwipeToDeleteCallBack
 import me.shangdelu.stretchez.database.StretchPlan
 import java.util.*
 
@@ -64,12 +62,18 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.bindingAdapterPosition
                 val currentId = adapter?.stretchPlans?.get(position)
-                currentId?.let {
+                currentId?.let { currentPlan ->
                     //get current timestamp of the stretch plan
                     //it.timestamp = System.currentTimeMillis();
 
+                    //delete the stretchExercise contain in current stretchPlan
+                    stretchPlanListViewModel.getExercisesOfPlan(currentPlan.id).observe(viewLifecycleOwner) { exerciseList ->
+                        exerciseList.forEach {
+                            stretchPlanListViewModel.deleteStretchExercise(it)
+                        }
+                    }
                     //delete the current stretch plan
-                    stretchPlanListViewModel.deleteStretchPlan(it)
+                    stretchPlanListViewModel.deleteStretchPlan(currentPlan)
                 }
 
 //                val deleteSnackbar = Snackbar.make(stretchPlanCoordinatorLayout,

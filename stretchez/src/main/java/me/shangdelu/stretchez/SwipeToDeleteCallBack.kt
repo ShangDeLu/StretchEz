@@ -57,7 +57,7 @@ abstract class SwipeToDeleteCallBack(context: Context?) : ItemTouchHelper.Callba
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             return
         }
-
+        
 
         // Draw the red delete background
         background.color = backgroundColor
@@ -77,8 +77,6 @@ abstract class SwipeToDeleteCallBack(context: Context?) : ItemTouchHelper.Callba
 
 
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-
-
 
     }
 
