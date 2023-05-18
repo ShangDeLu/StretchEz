@@ -1,9 +1,11 @@
 package me.shangdelu.stretchez.ui.main.ui.notifications
 
+import android.app.ProgressDialog.show
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
 import android.widget.TextView
@@ -17,12 +19,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import me.shangdelu.stretchez.R
 import me.shangdelu.stretchez.StretchExerciseFragment
 import me.shangdelu.stretchez.StretchExerciseListViewModel
 import me.shangdelu.stretchez.SwipeToDeleteCallBack
 import me.shangdelu.stretchez.database.StretchExercise
+import me.shangdelu.stretchez.ui.main.BottomNavigationMainActivity
 import java.util.*
 
 /**
@@ -41,6 +45,8 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
 
     private lateinit var stretchExerciseCoordinatorLayout: CoordinatorLayout
 
+    private lateinit var bottomNavView: BottomNavigationView
+
     //Initialize the adapter with an empty list since the fragment have to wait for results from
     //the database before it can populate the recycler view.
     private var exerciseAdapter: StretchExerciseAdapter? = StretchExerciseAdapter(emptyList())
@@ -55,6 +61,9 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_stretch_exercise_list, container, false)
+
+        //use requireActivity to find the bottom navigation view that is bind to Activity
+        bottomNavView = requireActivity().findViewById(R.id.nav_view)
 
         stretchExerciseRecyclerView = view.findViewById(R.id.stretch_exercise_recycler_view)
         //RecyclerView requires a layoutManager to work, otherwise it will crash
@@ -77,16 +86,16 @@ class StretchExerciseListFragment : Fragment(), ExerciseCallbacks {
                     //Use a snack bar to notify user template is non-deletable
                     val templateMessage = Snackbar.make(stretchExerciseCoordinatorLayout,
                         R.string.template_exercise_snackbar, Snackbar.LENGTH_LONG)
-                    templateMessage.setActionTextColor(Color.WHITE)
-                    templateMessage.show()
+                    //use bottomNavView to setAnchorView for the snack bar to prevent snack bar got blocked by bottom navigation bar.
+                    templateMessage.setActionTextColor(Color.WHITE).setAnchorView(bottomNavView).show()
                 } else { //if isTemplate is 0, current exercise is not a template.
                     //exercise is deletable, delete the exercise
                     stretchExerciseViewModel.deleteExercise(currentId!!)
                     //notify user the delete is success.
                     val deleteMessage = Snackbar.make(stretchExerciseCoordinatorLayout,
                         R.string.delete_exercise_snackbar, Snackbar.LENGTH_LONG)
-                    deleteMessage.setActionTextColor(Color.WHITE)
-                    deleteMessage.show()
+                    //use bottomNavView to setAnchorView for the snack bar to prevent snack bar got blocked by bottom navigation bar.
+                    deleteMessage.setActionTextColor(Color.WHITE).setAnchorView(bottomNavView).show()
                 }
             }
         }

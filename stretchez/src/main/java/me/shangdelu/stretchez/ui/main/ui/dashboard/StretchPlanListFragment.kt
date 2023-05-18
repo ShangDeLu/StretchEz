@@ -1,5 +1,6 @@
 package me.shangdelu.stretchez.ui.main.ui.dashboard
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
@@ -8,12 +9,13 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import me.shangdelu.stretchez.R
 import me.shangdelu.stretchez.StretchPlanFragment
 import me.shangdelu.stretchez.StretchPlanListViewModel
@@ -36,6 +38,8 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
 
     private lateinit var stretchPlanCoordinatorLayout: CoordinatorLayout
 
+    private lateinit var bottomNavView: BottomNavigationView
+
     private var adapter: StretchPlanAdapter? = StretchPlanAdapter(emptyList())
 
     private val stretchPlanListViewModel: StretchPlanListViewModel by lazy {
@@ -49,6 +53,9 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_stretch_plan_list, container, false)
+
+        //use requireActivity to find the bottom navigation view that is bind to Activity
+        bottomNavView = requireActivity().findViewById(R.id.nav_view)
 
         stretchPlanCoordinatorLayout = view.findViewById(R.id.stretch_plan_coordinator_layout)
 
@@ -75,19 +82,18 @@ class StretchPlanListFragment : Fragment(), StretchPlanCallbacks {
                     //delete the current stretch plan
                     stretchPlanListViewModel.deleteStretchPlan(currentPlan)
                 }
+                //notify the user that delete is complete
+                val deleteMessage = Snackbar.make(stretchPlanCoordinatorLayout,
+                    R.string.delete_plan_snackbar, Snackbar.LENGTH_LONG)
+                //use bottomNavView to setAnchorView for the snack bar to prevent snack bar got blocked by bottom navigation bar.
+                deleteMessage.setActionTextColor(Color.WHITE).setAnchorView(bottomNavView).show()
 
-//                val deleteSnackbar = Snackbar.make(stretchPlanCoordinatorLayout,
-//                    R.string.delete_plan_snackbar, Snackbar.LENGTH_LONG)
-//
-//                deleteSnackbar.setAction(R.string.undo_delete_snackbar) {
+//                deleteMessage.setAction(R.string.undo_delete_snackbar) {
 //                    currentId?.let {
 //                        it.timestamp = null
 //                        stretchPlanListViewModel.updateStretchPlan(it)
 //                    }
 //                }
-
-//                deleteSnackbar.setActionTextColor(Color.WHITE)
-//                deleteSnackbar.show()
             }
         }
         

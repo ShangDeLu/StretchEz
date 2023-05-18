@@ -74,9 +74,7 @@ class SelectActionFragment : Fragment() {
 
                 val deleteSnackbar = Snackbar.make(actionRecyclerView,
                     R.string.remove_action_snackbar, Snackbar.LENGTH_LONG)
-
-                deleteSnackbar.setActionTextColor(Color.WHITE)
-                deleteSnackbar.show()
+                deleteSnackbar.setActionTextColor(Color.WHITE).show()
             }
         }
 

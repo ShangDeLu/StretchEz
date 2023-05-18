@@ -41,13 +41,4 @@ class BottomNavigationMainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp()
     }
-
-//    override fun onExerciseSelected(exerciseID: Int?, option: Int) {
-//        val fragment = StretchExerciseFragment.newInstance(exerciseID, option)
-//        supportFragmentManager
-//            .beginTransaction()
-//            .replace(R.id.container, fragment)
-//            .addToBackStack(null) //so when press back button, will go back to the list of exercise
-//            .commit()
-//    }
 }

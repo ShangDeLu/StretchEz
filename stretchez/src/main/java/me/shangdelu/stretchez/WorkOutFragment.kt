@@ -220,6 +220,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
         //TODO 0.1: Ask if there are better ways to initialize youtubeiframeapi when the first video is not a youtube video.
         //TODO 0.2: Add icon or image in workoutFragment after the stretchPlan is complete. (To congratulate user for finishing the plan)
+        //TODO 0.3: Enable Back Button all the time and change the color of repeat button when disabled.
         //TODO 1: Change the input type of exerciseDescription to multiline.
         //TODO 2: Either set an error message when exercise duration spinner is 0 seconds or take away the option of 0 seconds in spinner.
         //TODO 3: Prevent snack bar got blocked by navigation bar.
