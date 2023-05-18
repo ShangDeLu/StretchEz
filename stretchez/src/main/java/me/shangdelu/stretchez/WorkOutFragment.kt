@@ -1,5 +1,6 @@
 package me.shangdelu.stretchez
 
+import android.graphics.BlendModeColorFilter
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -12,6 +13,8 @@ import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.VideoView
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -190,6 +193,14 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         returnButton = view.findViewById(R.id.return_button) as Button
         intervalTextView = view.findViewById(R.id.interval_textView) as TextView
 
+        //grey out the background of the repeatButton to notify user it is disabled
+        repeatButton.background.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(requireContext().getColor(R.color.grey), BlendModeCompat.SRC_ATOP)
+
+        //Button to return to stretch plan list
+        returnButton.setOnClickListener {
+            findNavController().navigate(R.id.action_navigation_work_out_to_navigation_stretch_plan_list)
+        }
+
         videoView.setOnPreparedListener { mp ->
             //get a reference of mp
             mediaPlayer = mp
@@ -200,7 +211,7 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         }
 
         //set a onClickListener to control the state of the mediaPlayer.
-        //TODO: Maybe try to set the Listener on a separate button
+        //TODO: Possible Feature: Try setting the Listener on a separate button and get feedback
         videoView.setOnClickListener {
             if (playingFlag) {
                 //if mediaPlayer is currently playing, pause it and change the state of flag
@@ -220,15 +231,12 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
         //TODO 0.1: Ask if there are better ways to initialize youtubeiframeapi when the first video is not a youtube video.
         //TODO 0.2: Add icon or image in workoutFragment after the stretchPlan is complete. (To congratulate user for finishing the plan)
-        //TODO 0.3: Enable Back Button all the time and change the color of repeat button when disabled.
         //TODO 1: Change the input type of exerciseDescription to multiline.
-        //TODO 2: Either set an error message when exercise duration spinner is 0 seconds or take away the option of 0 seconds in spinner.
-        //TODO 3: Prevent snack bar got blocked by navigation bar.
-        //TODO 4: Learn about SharedPreference, ActivityLifeCycleCallbacks and observeForever.
-        //TODO 5: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
-        //TODO 6: Possible feature: Schedule Planner and notification before the scheduled plan.
-        //TODO 6.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
-        //TODO 7: Version 1: User can create a new plan, add exercise to plan and finish a stretching process without any guidance.
+        //TODO 2: Learn about SharedPreference, ActivityLifeCycleCallbacks and observeForever.
+        //TODO 3: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
+        //TODO 4: Possible feature: Schedule Planner and notification before the scheduled plan.
+        //TODO 4.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
+        //TODO 5: Version 1: User can create a new plan, add exercise to plan and finish a stretching process without any guidance.
 
         return view
     }
@@ -279,9 +287,13 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             videoView.setVideoURI(Uri.parse(reset.exerciseLink))
             videoView.start()
         }
-        //make the repeat and return button disabled
+        //make the repeat disabled
         repeatButton.isEnabled = false
-        returnButton.isEnabled = false
+        //grey out the background of the repeatButton to notify user it is disabled
+        repeatButton.background.colorFilter = BlendModeColorFilterCompat
+            .createBlendModeColorFilterCompat(requireContext().getColor(R.color.grey), BlendModeCompat.SRC_ATOP)
+        //change the text on cdTimer to notify the user repeat has processed.
+        cdTimerText?.text = getString(R.string.default_time)
     }
 
 
@@ -377,7 +389,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                         //stop and release the media player instance and move to idle state
                         videoView.stopPlayback()
 
-                        //TODO: try setBackgroundResource to see the effect
                         //clear the last frame of videoView to prevent onClickListener accidentally triggered
                         videoView.visibility = View.GONE
 
@@ -385,19 +396,17 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
                         //stop the current video as countdown timer finished
                         webView.evaluateJavascript("stopVideo()", null)
 
+                        //show "Complete" on cdTimer
                         cdTimerText?.text = getString(R.string.complete_time)
-                        //enable the repeat and return button
+                        //enable the repeat button
                         repeatButton.isEnabled = true
-                        returnButton.isEnabled = true
+                        //change the background of the repeatButton back to normal notifying the button is now enabled
+                        repeatButton.background.colorFilter = BlendModeColorFilterCompat
+                            .createBlendModeColorFilterCompat(requireContext().getColor(R.color.bright_lavender), BlendModeCompat.SRC_ATOP)
                         //Button to repeat current exercise
                         repeatButton.setOnClickListener {
                             //Reset the timer instead of replace the fragment
                             repeat()
-                        }
-
-                        //Button to return to home screen
-                        returnButton.setOnClickListener {
-                            findNavController().navigate(R.id.action_navigation_work_out_to_navigation_home)
                         }
                     }
                 }

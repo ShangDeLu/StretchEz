@@ -70,6 +70,10 @@
         <action
             android:id="@+id/action_navigation_work_out_to_navigation_home"
             app:destination="@id/navigation_home" />
+
+        <action
+            android:id="@+id/action_navigation_work_out_to_navigation_stretch_plan_list"
+            app:destination="@+id/navigation_stretch_plan_list" />
     </fragment>
 
     <fragment

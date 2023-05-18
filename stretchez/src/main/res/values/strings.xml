@@ -4,6 +4,7 @@
     <string name="start_stretching">Start Stretching</string>
     <string name="work_out_page">This is Workout Page</string>
     <string name="testing_time">02:00</string>
+    <string name="default_time">00:00</string>
     <string name="formatted_time">%02d:%02d</string>
     <string name="complete_time">Complete!</string>
     <string name="finish_stretching">Congratulations!</string>
