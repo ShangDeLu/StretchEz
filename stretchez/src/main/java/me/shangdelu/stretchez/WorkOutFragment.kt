@@ -1,6 +1,5 @@
 package me.shangdelu.stretchez
 
-import android.graphics.BlendModeColorFilter
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -211,7 +210,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         }
 
         //set a onClickListener to control the state of the mediaPlayer.
-        //TODO: Possible Feature: Try setting the Listener on a separate button and get feedback
         videoView.setOnClickListener {
             if (playingFlag) {
                 //if mediaPlayer is currently playing, pause it and change the state of flag
@@ -231,8 +229,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
         //TODO 0.1: Ask if there are better ways to initialize youtubeiframeapi when the first video is not a youtube video.
         //TODO 0.2: Add icon or image in workoutFragment after the stretchPlan is complete. (To congratulate user for finishing the plan)
-        //TODO 1: Change the input type of exerciseDescription to multiline.
-        //TODO 2: Learn about SharedPreference, ActivityLifeCycleCallbacks and observeForever.
+        //TODO 1: Learn about SharedPreference, ActivityLifeCycleCallbacks and observeForever.
+        //TODO 2: Possible Feature: Try setting the Listener on a separate button and get feedback
         //TODO 3: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
         //TODO 4: Possible feature: Schedule Planner and notification before the scheduled plan.
         //TODO 4.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
@@ -242,7 +240,6 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
     }
 
     private fun getYoutubeVideoID(videoUrl: String): String {
-        //TODO: Use helper text and error message to guide user to use youtube url from the share tab.
         //Use pattern and matcher to get the youtube video ID from the URL link
         val youtubePattern = "(?<=watch]]?v=|/videos/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D|%2Fvideos%2F|embed%2F|youtu.be%2F|%2Fv%2F)[^#\\&\\?\\n]*"
         val compiledPattern: Pattern = Pattern.compile(youtubePattern)
@@ -283,6 +280,8 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
             fromYoutube = false
             //reset the timer with the duration of first exercise
             timerStart(reset.exerciseDuration.toLong() * 1000)
+            //show videoView
+            videoView.visibility = View.VISIBLE
             //reset video path and start playing
             videoView.setVideoURI(Uri.parse(reset.exerciseLink))
             videoView.start()
