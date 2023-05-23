@@ -229,12 +229,22 @@ class WorkOutFragment : Fragment(), CountDownTimerCallBacks {
         //TODO 0: Ask about why ErrorTextAppearance is not working in xml file.
         //TODO 0.1: Ask if there are better ways to initialize youtubeiframeapi when the first video is not a youtube video.
         //TODO 0.2: Add icon or image in workoutFragment after the stretchPlan is complete. (To congratulate user for finishing the plan)
+        //TODO 0.3: User should not be able to start stretching if current plan does not contain any exercise yet.
+        //TODO 0.4: Notify user how many exercise is in the current plan (at least notify user when current plan is empty with no exercise at all).
         //TODO 1: Learn about SharedPreference, ActivityLifeCycleCallbacks and observeForever.
         //TODO 2: Possible Feature: Try setting the Listener on a separate button and get feedback
         //TODO 3: Possible feature: User need to enter edit mode to make changes on existing plan and exercise instead of directly make changes.
         //TODO 4: Possible feature: Schedule Planner and notification before the scheduled plan.
         //TODO 4.1: Learn about time picker, as it can be used to choose date/time and schedule the event.
         //TODO 5: Version 1: User can create a new plan, add exercise to plan and finish a stretching process without any guidance.
+
+        //Feedback 1: More user guidance visually, so first time user can have a more smooth experience.
+        //1.1: Notify user to click the "+" button on top right when the stretch plan list is empty.
+        //Feedback 2: Consider adding different language options (such as Chinese).
+        //Feedback 3: Swipe to delete and tap screen to pause did not determined by the user until mentioned.
+        //3.1: Consider adding a pause/play button instead of tap the screen.
+        //3.2: Consider adding a separate delete button while still enable swipe to delete.
+        //Feedback 4: Home screen looks too empty and sometimes may lead to confusion.
 
         return view
     }
